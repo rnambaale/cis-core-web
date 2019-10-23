@@ -4,11 +4,13 @@ namespace Tests\Feature\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\Clients\ClientCredentialsClientInterface;
 
 /**
  * @see \App\Http\Controllers\Auth\ResetPasswordController
@@ -65,6 +67,23 @@ class ResetPasswordControllerTest extends TestCase
 
     public function test_cant_reset_password_with_invalid_email()
     {
+        $fakeApiResponseBody = [
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'email' => [
+                    'Wrong email or password.',
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(422, [], json_encode($fakeApiResponseBody));
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         $user = factory(User::class)->create([
             'password' => Hash::make('old-password'),
         ]);
@@ -88,6 +107,23 @@ class ResetPasswordControllerTest extends TestCase
 
     public function test_cant_reset_password_with_invalid_password()
     {
+        $fakeApiResponseBody = [
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'email' => [
+                    'Wrong email or password.',
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(422, [], json_encode($fakeApiResponseBody));
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         $user = factory(User::class)->create([
             'password' => Hash::make('old-password'),
         ]);
@@ -113,6 +149,16 @@ class ResetPasswordControllerTest extends TestCase
      */
     public function test_can_reset_password_with_valid_token()
     {
+        $this->withoutExceptionHandling();
+
+        $fakeResponse = new Response(204, [], null);
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         $user = factory(User::class)->create();
 
         Event::fake();
@@ -124,12 +170,14 @@ class ResetPasswordControllerTest extends TestCase
             'password_confirmation' => 'new-awesome-password',
         ]);
 
-        $response->assertRedirect(route('home'));
+        $response->assertRedirect(route('login'));
+
         $this->assertEquals($user->email, $user->fresh()->email);
-        $this->assertTrue(Hash::check('new-awesome-password', $user->fresh()->password));
-        $this->assertAuthenticatedAs($user);
-        Event::assertDispatched(PasswordReset::class, function ($e) use ($user) {
-            return $e->user->id === $user->id;
-        });
+
+        $this->assertGuest();
+
+        // Event::assertDispatched(PasswordReset::class, function ($e) use ($user) {
+        //     return $e->user->id === $user->id;
+        // });
     }
 }

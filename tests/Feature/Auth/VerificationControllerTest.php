@@ -6,11 +6,13 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Http\Clients\ClientCredentialsClientInterface;
 
 /**
  * @see \App\Http\Controllers\Auth\VerificationController
@@ -105,6 +107,14 @@ class VerificationControllerTest extends TestCase
 
     public function test_cant_visit_email_verification_when_verified()
     {
+        $fakeResponse = new Response(204, [], null);
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         $user = factory(User::class)->create([
             'email_verified_at' => now(),
         ]);
@@ -127,6 +137,14 @@ class VerificationControllerTest extends TestCase
 
     public function test_can_verify_email_with_valid_signature()
     {
+        $fakeResponse = new Response(204, [], null);
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         $user = factory(User::class)->create([
             'email_verified_at' => null,
         ]);
@@ -158,7 +176,16 @@ class VerificationControllerTest extends TestCase
 
     public function test_can_request_resend_email_verification_link()
     {
+        $fakeResponse = new Response(204, [], null);
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
         Notification::fake();
+
         $user = factory(User::class)->create([
             'email_verified_at' => null,
         ]);
