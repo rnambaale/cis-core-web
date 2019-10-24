@@ -7,11 +7,10 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Repositories\TokenRepository;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use App\Repositories\SessionTokenRepository;
 use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Clients\ClientCredentialsClientInterface;
@@ -70,6 +69,16 @@ class LoginController extends Controller
     }
 
     /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    /**
      * Handle a login request to the application.
      *
      * @param \Illuminate\Http\Request $request
@@ -105,11 +114,9 @@ class LoginController extends Controller
 
         // Backup password-grant token
 
-        $tokenRepository = new TokenRepository(); // DI
+        $tokenSessionRepository = new SessionTokenRepository();
 
-        $tokenRepository->create((array) $response->token);
-
-        // ...
+        $tokenSessionRepository->create((array) $response->token);
 
         // Attempt local login
 
@@ -134,6 +141,8 @@ class LoginController extends Controller
         if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
             return $response;
         }
+
+        // ...
 
         $this->guard()->logout();
 
@@ -167,10 +176,6 @@ class LoginController extends Controller
             $body = json_decode($ex->getResponse()->getBody(), true);
 
             flash($body['message'])->warning()->important();
-        } catch (ServerException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->error()->important();
         }
 
         return redirect()->back();
@@ -221,10 +226,6 @@ class LoginController extends Controller
             $body = json_decode($ex->getResponse()->getBody(), true);
 
             flash($body['message'])->warning()->important();
-        } catch (ServerException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->error()->important();
         }
 
         return redirect()->back();
@@ -236,7 +237,7 @@ class LoginController extends Controller
      * @param object $alien
      * @param string $secret
      *
-     * @return App\Models\User
+     * @return \App\Models\User
      */
     protected function syncRemoteUser(object $alien, string $secret): User
     {
