@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Hash;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use App\Repositories\SessionTokenRepository;
 use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Clients\ClientCredentialsClientInterface;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class LoginController extends Controller
 {
@@ -52,19 +52,29 @@ class LoginController extends Controller
     protected $passwordClient;
 
     /**
+     * OAuth token repository.
+     *
+     * @var \Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface
+     */
+    protected $tokenRepository;
+
+    /**
      * Create a new controller instance.
      *
      * @param \App\Http\Clients\ClientCredentialsClientInterface $clientCredentialsClient
      * @param \App\Http\Clients\PasswordClientInterface          $passwordClient
+     * @param TokenRepositoryInterface                           $tokenRepository
      *
      * @return void
      */
     public function __construct(
         ClientCredentialsClientInterface $clientCredentialsClient,
-        PasswordClientInterface $passwordClient
+        PasswordClientInterface $passwordClient,
+        TokenRepositoryInterface $tokenRepository
     ) {
         $this->machineClient = $clientCredentialsClient;
         $this->passwordClient = $passwordClient;
+        $this->tokenRepository = $tokenRepository;
         $this->middleware('guest')->except('logout');
     }
 
@@ -114,9 +124,7 @@ class LoginController extends Controller
 
         // Backup password-grant token
 
-        $tokenSessionRepository = new SessionTokenRepository();
-
-        $tokenSessionRepository->create((array) $response->token);
+        $this->tokenRepository->create((array) $response->token);
 
         // Attempt local login
 

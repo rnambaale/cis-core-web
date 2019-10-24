@@ -4,9 +4,11 @@ namespace Tests;
 
 use App\Http\Clients\PasswordClient;
 use App\Providers\AppServiceProvider;
+use App\Repositories\SessionTokenRepository;
 use App\Http\Clients\ClientCredentialsClient;
 use App\Http\Clients\PasswordClientInterface;
 use App\Http\Clients\ClientCredentialsClientInterface;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class FakeServiceProvider extends AppServiceProvider
 {
@@ -25,6 +27,10 @@ class FakeServiceProvider extends AppServiceProvider
 
         $this->app->bind(PasswordClientInterface::class, function () {
             return new PasswordClient();
+        });
+
+        $this->app->bind(TokenRepositoryInterface::class, function () {
+            return new SessionTokenRepository();
         });
     }
 }

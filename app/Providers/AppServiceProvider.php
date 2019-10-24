@@ -17,6 +17,7 @@ use Bmatovu\OAuthNegotiator\GrantTypes\RefreshToken;
 use App\Http\Clients\ClientCredentialsClientInterface;
 use Bmatovu\OAuthNegotiator\GrantTypes\ClientCredentials;
 use Bmatovu\OAuthNegotiator\Repositories\FileTokenRepository;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(PasswordClientInterface::class, function () {
             return $this->createPasswordClient();
+        });
+
+        $this->app->bind(TokenRepositoryInterface::class, function () {
+            return new SessionTokenRepository();
         });
     }
 
