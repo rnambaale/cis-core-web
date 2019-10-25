@@ -114,21 +114,32 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        $response = $this->remoteLogin($request);
+        $response = $alien = $this->remoteLogin($request);
 
         if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
             return $response;
         }
 
-        $this->syncRemoteUser($response, $request->password);
+        $this->syncRemoteUser($alien, $request->password);
 
         // Backup password-grant token
 
-        $this->tokenRepository->create((array) $response->token);
+        $this->tokenRepository->create((array) $alien->token);
 
         // Attempt local login
 
         if ($this->attemptLogin($request)) {
+
+            // Sync user permissions
+
+            $apiResponse = $this->remoteQueryPermissionsGranted($alien->role_id);
+
+            $permissions = $this->processPermissions($apiResponse['permissions']);
+
+            $request->session()->put('permissions', $permissions);
+
+            // ...
+
             return $this->sendLoginResponse($request);
         }
 
@@ -237,6 +248,59 @@ class LoginController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * Remote; query permissions granted to user.
+     *
+     * @param string $role User role ID
+     *
+     * @return array|\Symfony\Component\HttpFoundation\Response Remote user or http response.
+     */
+    protected function remoteQueryPermissionsGranted($role)
+    {
+        try {
+            $response = $this->passwordClient->get("roles/{$role}/permissions/granted");
+
+            $api_response = json_decode($response->getBody(), true);
+
+            return $api_response;
+        } catch (ConnectException $ex) {
+            flash('Error connecting to remote service.')->error()->important();
+        } catch (ClientException $ex) {
+            $statusCode = $ex->getResponse()->getStatusCode();
+
+            $body = json_decode($ex->getResponse()->getBody(), true);
+
+            flash($body['message'])->warning()->important();
+        } catch (RequestException $ex) {
+            $body = json_decode($ex->getResponse()->getBody(), true);
+
+            flash($body['message'])->warning()->important();
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Group permissions by module.
+     *
+     * @param array $rawPermissions
+     *
+     * @return array
+     */
+    protected function processPermissions(array $rawPermissions)
+    {
+        $processedPerms = [];
+
+        foreach ($rawPermissions as $permission) {
+            if ($permission['granted']) {
+                $module = $permission['module']['name'];
+                $processedPerms[$module][] = $permission['name'];
+            }
+        }
+
+        return $processedPerms;
     }
 
     /**
