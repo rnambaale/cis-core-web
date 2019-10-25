@@ -205,6 +205,14 @@ class LoginControllerTest extends TestCase
 
         // ...
 
+        $fakeResponse = new Response(200, [], json_encode(['permissions' => []]));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
         $password = 'gJrFhC2B-!Y!4CTk';
 
         $user = factory(User::class)->create([
@@ -217,6 +225,8 @@ class LoginControllerTest extends TestCase
         ]);
 
         $response->assertRedirect(route('home'));
+        $response->assertSessionHas('token');
+        $response->assertSessionHas('permissions');
         $this->assertAuthenticatedAs($user);
     }
 
@@ -233,6 +243,14 @@ class LoginControllerTest extends TestCase
         $fakeMachineClient = $this->mockMachineClient($fakeResponse);
 
         $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
+        $fakeResponse = new Response(200, [], json_encode(['permissions' => []]));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
 
         // ...
 
@@ -257,6 +275,8 @@ class LoginControllerTest extends TestCase
             $user->getRememberToken(),
             $user->password,
         ]));
+        $response->assertSessionHas('token');
+        $response->assertSessionHas('permissions');
         $this->assertAuthenticatedAs($user);
     }
 
