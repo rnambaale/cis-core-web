@@ -7,14 +7,13 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use App\Repositories\TokenRepository;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Clients\ClientCredentialsClientInterface;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class LoginController extends Controller
 {
@@ -53,20 +52,40 @@ class LoginController extends Controller
     protected $passwordClient;
 
     /**
+     * OAuth token repository.
+     *
+     * @var \Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface
+     */
+    protected $tokenRepository;
+
+    /**
      * Create a new controller instance.
      *
      * @param \App\Http\Clients\ClientCredentialsClientInterface $clientCredentialsClient
      * @param \App\Http\Clients\PasswordClientInterface          $passwordClient
+     * @param TokenRepositoryInterface                           $tokenRepository
      *
      * @return void
      */
     public function __construct(
         ClientCredentialsClientInterface $clientCredentialsClient,
-        PasswordClientInterface $passwordClient
+        PasswordClientInterface $passwordClient,
+        TokenRepositoryInterface $tokenRepository
     ) {
         $this->machineClient = $clientCredentialsClient;
         $this->passwordClient = $passwordClient;
+        $this->tokenRepository = $tokenRepository;
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
     }
 
     /**
@@ -95,25 +114,32 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        $response = $this->remoteLogin($request);
+        $response = $alien = $this->remoteLogin($request);
 
         if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
             return $response;
         }
 
-        $this->syncRemoteUser($response, $request->password);
+        $this->syncRemoteUser($alien, $request->password);
 
         // Backup password-grant token
 
-        $tokenRepository = new TokenRepository(); // DI
-
-        $tokenRepository->create((array) $response->token);
-
-        // ...
+        $this->tokenRepository->create((array) $alien->token);
 
         // Attempt local login
 
         if ($this->attemptLogin($request)) {
+
+            // Sync user permissions
+
+            $apiResponse = $this->remoteQueryPermissionsGranted($alien->role_id);
+
+            $permissions = $this->processPermissions($apiResponse['permissions']);
+
+            $request->session()->put('permissions', $permissions);
+
+            // ...
+
             return $this->sendLoginResponse($request);
         }
 
@@ -134,6 +160,8 @@ class LoginController extends Controller
         if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
             return $response;
         }
+
+        // ...
 
         $this->guard()->logout();
 
@@ -167,10 +195,6 @@ class LoginController extends Controller
             $body = json_decode($ex->getResponse()->getBody(), true);
 
             flash($body['message'])->warning()->important();
-        } catch (ServerException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->error()->important();
         }
 
         return redirect()->back();
@@ -221,13 +245,62 @@ class LoginController extends Controller
             $body = json_decode($ex->getResponse()->getBody(), true);
 
             flash($body['message'])->warning()->important();
-        } catch (ServerException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->error()->important();
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * Remote; query permissions granted to user.
+     *
+     * @param string $role User role ID
+     *
+     * @return array|\Symfony\Component\HttpFoundation\Response Remote user or http response.
+     */
+    protected function remoteQueryPermissionsGranted($role)
+    {
+        try {
+            $response = $this->passwordClient->get("roles/{$role}/permissions/granted");
+
+            $api_response = json_decode($response->getBody(), true);
+
+            return $api_response;
+        } catch (ConnectException $ex) {
+            flash('Error connecting to remote service.')->error()->important();
+        } catch (ClientException $ex) {
+            $statusCode = $ex->getResponse()->getStatusCode();
+
+            $body = json_decode($ex->getResponse()->getBody(), true);
+
+            flash($body['message'])->warning()->important();
+        } catch (RequestException $ex) {
+            $body = json_decode($ex->getResponse()->getBody(), true);
+
+            flash($body['message'])->warning()->important();
+        }
+
+        return redirect()->back();
+    }
+
+    /**
+     * Group permissions by module.
+     *
+     * @param array $rawPermissions
+     *
+     * @return array
+     */
+    protected function processPermissions(array $rawPermissions)
+    {
+        $processedPerms = [];
+
+        foreach ($rawPermissions as $permission) {
+            if ($permission['granted']) {
+                $module = $permission['module']['name'];
+                $processedPerms[$module][] = $permission['name'];
+            }
+        }
+
+        return $processedPerms;
     }
 
     /**
@@ -236,7 +309,7 @@ class LoginController extends Controller
      * @param object $alien
      * @param string $secret
      *
-     * @return App\Models\User
+     * @return \App\Models\User
      */
     protected function syncRemoteUser(object $alien, string $secret): User
     {

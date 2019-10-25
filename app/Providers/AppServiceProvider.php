@@ -7,8 +7,8 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use App\Http\Clients\PasswordClient;
-use App\Repositories\TokenRepository;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\SessionTokenRepository;
 use App\Http\Clients\ClientCredentialsClient;
 use App\Http\Clients\PasswordClientInterface;
 use Bmatovu\OAuthNegotiator\OAuth2Middleware;
@@ -16,6 +16,8 @@ use Bmatovu\OAuthNegotiator\GrantTypes\Password;
 use Bmatovu\OAuthNegotiator\GrantTypes\RefreshToken;
 use App\Http\Clients\ClientCredentialsClientInterface;
 use Bmatovu\OAuthNegotiator\GrantTypes\ClientCredentials;
+use Bmatovu\OAuthNegotiator\Repositories\FileTokenRepository;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(PasswordClientInterface::class, function () {
             return $this->createPasswordClient();
+        });
+
+        $this->app->bind(TokenRepositoryInterface::class, function () {
+            return new SessionTokenRepository();
         });
     }
 
@@ -80,8 +86,10 @@ class AppServiceProvider extends ServiceProvider
         // Refresh Token when no valid Access Token or Refresh Token is available
         $clientCredGrant = new ClientCredentials($client, $config);
 
+        $fileTokenRepository = new FileTokenRepository(storage_path('client-token.key'));
+
         // Tell the middleware to use both the client and refresh token grants
-        $oauthMiddleware = new OAuth2Middleware($clientCredGrant);
+        $oauthMiddleware = new OAuth2Middleware($clientCredGrant, null, $fileTokenRepository);
 
         // .................................................................
 
@@ -140,9 +148,9 @@ class AppServiceProvider extends ServiceProvider
             'scope' => implode(' ', config('oauth.client.scopes')),
         ]);
 
-        $tokenRepository = new TokenRepository();
+        $sessionTokenRepository = new SessionTokenRepository();
 
-        $oauthMiddleware = new OAuth2Middleware($passwordGrant, $refreshTokenGrant, $tokenRepository);
+        $oauthMiddleware = new OAuth2Middleware($passwordGrant, $refreshTokenGrant, $sessionTokenRepository);
 
         // .................................................................
 
