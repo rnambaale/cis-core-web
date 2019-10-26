@@ -8,17 +8,41 @@ class HelpersTest extends TestCase
 {
     public function test_can_check_pemissions()
     {
-        $permissions = [
+        $modules = [
             'users' => [
                 'create',
             ],
         ];
 
-        app('session')->put('permissions', $permissions);
+        app('session')->put('modules', $modules);
 
-        $this->assertTrue(can('users'));
-        $this->assertFalse(can('roles'));
-        $this->assertTrue(can('users', 'create'));
-        $this->assertFalse(can('users', 'delete'));
+        $this->assertTrue(auth_can('users', 'create'));
+        $this->assertFalse(auth_can('users', 'delete'));
+    }
+
+    public function test_can_check_modules()
+    {
+        $modules = [
+            'users' => [
+                'create',
+            ],
+        ];
+
+        app('session')->put('modules', $modules);
+
+        $this->assertTrue(auth_has('users'));
+        $this->assertFalse(auth_has('roles'));
+    }
+
+    public function test_can_check_categories()
+    {
+        $categories = [
+            'administration',
+        ];
+
+        app('session')->put('categories', $categories);
+
+        $this->assertTrue(auth_any('administration'));
+        $this->assertFalse(auth_any('pharmacy'));
     }
 }

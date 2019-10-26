@@ -136,7 +136,9 @@ class LoginController extends Controller
 
             $permissions = $this->processPermissions($apiResponse['permissions']);
 
-            $request->session()->put('permissions', $permissions);
+            $request->session()->put('modules', $permissions['modules']);
+
+            $request->session()->put('categories', $permissions['categories']);
 
             // ...
 
@@ -255,9 +257,9 @@ class LoginController extends Controller
      *
      * @param string $role User role ID
      *
-     * @return array|\Symfony\Component\HttpFoundation\Response Remote user or http response.
+     * @return array|\Symfony\Component\HttpFoundation\Response
      */
-    protected function remoteQueryPermissionsGranted($role)
+    protected function remoteQueryPermissionsGranted(string $role): array
     {
         try {
             $response = $this->passwordClient->get("roles/{$role}/permissions/granted");
@@ -291,16 +293,21 @@ class LoginController extends Controller
      */
     protected function processPermissions(array $rawPermissions)
     {
-        $processedPerms = [];
+        $categories = $modules = [];
 
         foreach ($rawPermissions as $permission) {
             if ($permission['granted']) {
+                $categories[] = $permission['module']['category'];
+
                 $module = $permission['module']['name'];
-                $processedPerms[$module][] = $permission['name'];
+                $modules[$module][] = $permission['name'];
             }
         }
 
-        return $processedPerms;
+        return [
+            'categories' => array_unique($categories),
+            'modules' => $modules,
+        ];
     }
 
     /**

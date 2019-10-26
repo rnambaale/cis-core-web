@@ -226,7 +226,8 @@ class LoginControllerTest extends TestCase
 
         $response->assertRedirect(route('home'));
         $response->assertSessionHas('token');
-        $response->assertSessionHas('permissions');
+        $response->assertSessionHas('categories');
+        $response->assertSessionHas('modules');
         $this->assertAuthenticatedAs($user);
     }
 
@@ -276,7 +277,8 @@ class LoginControllerTest extends TestCase
             $user->password,
         ]));
         $response->assertSessionHas('token');
-        $response->assertSessionHas('permissions');
+        $response->assertSessionHas('categories');
+        $response->assertSessionHas('modules');
         $this->assertAuthenticatedAs($user);
     }
 
