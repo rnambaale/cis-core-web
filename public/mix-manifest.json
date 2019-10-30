@@ -1,4 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/js/espire.js": "/js/espire.js",
+    "/vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js": "/vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js",
+    "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css": "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css"
 }
