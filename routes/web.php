@@ -33,3 +33,10 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 });
+
+Route::pattern('facility', $uuid);
+
+Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
+    Route::get('/', 'FacilityController@index')->name('index');
+    Route::get('/{facility}', 'FacilityController@show')->name('show');
+});

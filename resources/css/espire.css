@@ -35,6 +35,8 @@ p { font-family: Roboto, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI
 
 .lead { font-size: 18px; }
 
+.no-wrap { white-space: nowrap; }
+
 ul { margin-bottom: 0px; }
 
 a { color: #0f9aee; }
