@@ -48,6 +48,7 @@
         </div>
     </div>
 
+    <script> window.appUrl = '{!! config('app.url') !!}'; </script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js') }}"></script>
     <script src="{{ asset('js/espire.js') }}"></script>
