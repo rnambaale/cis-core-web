@@ -70,8 +70,7 @@ class FacilityController extends Controller
     /**
      * Create facility.
      *
-     * @param \Illuminate\Http\Request
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\View\View
      */
@@ -107,9 +106,8 @@ class FacilityController extends Controller
     /**
      * Update facility.
      *
-     * @param \Illuminate\Http\Request $requests
+     * @param \Illuminate\Http\Request $request
      * @param string                   $facilityId
-     * @param Request                  $request
      *
      * @return \Illuminate\View\View
      */
@@ -129,13 +127,11 @@ class FacilityController extends Controller
     /**
      * Revoke facility.
      *
-     * @param \Illuminate\Http\Request $requests
-     * @param string                   $facilityId
-     * @param Request                  $request
+     * @param string $facilityId
      *
      * @return \Illuminate\View\View
      */
-    public function revoke(Request $request, $facilityId)
+    public function revoke($facilityId)
     {
         $apiResponse = $this->passwordClient->put("facilities/{$facilityId}/revoke");
 
@@ -149,13 +145,11 @@ class FacilityController extends Controller
     /**
      * Restore facility.
      *
-     * @param \Illuminate\Http\Request $requests
-     * @param string                   $facilityId
-     * @param Request                  $request
+     * @param string $facilityId
      *
      * @return \Illuminate\View\View
      */
-    public function restore(Request $request, $facilityId)
+    public function restore($facilityId)
     {
         $apiResponse = $this->passwordClient->put("facilities/{$facilityId}/restore");
 
@@ -169,13 +163,11 @@ class FacilityController extends Controller
     /**
      * Delete facility.
      *
-     * @param \Illuminate\Http\Request $requests
-     * @param string                   $facilityId
-     * @param Request                  $request
+     * @param string $facilityId
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request, $facilityId)
+    public function destroy($facilityId)
     {
         $this->passwordClient->delete("facilities/{$facilityId}");
 
