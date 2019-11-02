@@ -83,6 +83,8 @@ class FacilityController extends Controller
 
         $facility = json_decode($apiResponse->getBody(), false);
 
+        flash("{$facility->name} created.")->success();
+
         return view('facilities.show', ['facility' => $facility]);
     }
 
