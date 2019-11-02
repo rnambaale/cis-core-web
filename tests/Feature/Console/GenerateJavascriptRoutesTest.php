@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Console;
 
-use Tests\TestCase;
 use Illuminate\Filesystem\Filesystem;
+use Tests\TestCase;
 
 /**
  * @see \App\Console\Commands\GenerateJavascriptRoutes

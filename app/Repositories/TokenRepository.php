@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
 use App\Models\Token;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
+use Carbon\Carbon;
 
 class TokenRepository implements TokenRepositoryInterface
 {

@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
+use App\Http\Clients\PasswordClientInterface;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
-use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 /**
  * @see \App\Http\Controllers\FacilityController

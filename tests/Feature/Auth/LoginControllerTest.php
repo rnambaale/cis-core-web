@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Auth;
 
-use Tests\TestCase;
+use App\Http\Clients\ClientCredentialsClientInterface;
+use App\Http\Clients\PasswordClientInterface;
 use App\Models\User;
-use Ramsey\Uuid\Uuid;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Clients\PasswordClientInterface;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Http\Clients\ClientCredentialsClientInterface;
+use Ramsey\Uuid\Uuid;
+use Tests\TestCase;
 
 /**
  * @see \App\Http\Controllers\Auth\LoginController

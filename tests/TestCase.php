@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Handler\MockHandler;
-use App\Http\Clients\PasswordClient;
 use App\Http\Clients\ClientCredentialsClient;
+use App\Http\Clients\PasswordClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase

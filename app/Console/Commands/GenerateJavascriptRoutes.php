@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Routing\Router;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\File;
 
 /**
  * @link https://ideas.hexbridge.com/how-to-use-laravel-routes-in-javascript-4d9c484a0d97 Source
