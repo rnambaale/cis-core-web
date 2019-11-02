@@ -52,5 +52,7 @@ class FacilityControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('facilities.index'));
 
         $response->assertStatus(200);
+
+        $response->assertViewIs('facilities.index');
     }
 }

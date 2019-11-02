@@ -2558,7 +2558,7 @@ button.disabled, button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-rounded { border-radius: 50px; }
 
-.btn-block { padding-top: 12px; padding-bottom: 12px; }
+/*.btn-block { padding-top: 12px; padding-bottom: 12px; }*/
 
 .btn-group .btn { padding: 10px 14px; margin-right: 0px; }
 
@@ -2886,7 +2886,7 @@ label.success { color: #37c936; }
 
 .tag-danger { background-color: #ff3c7e; color: #ffffff; }
 
-.card { position: relative; background-color: #ffffff; margin-bottom: 30px; border: 1px solid #e6ecf5; border-radius: 5px; transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; -ms-transition: all 0.3s ease-in-out; }
+.card { position: relative; background-color: #ffffff; margin-bottom: 20px; border: 1px solid #e6ecf5; border-radius: 5px; transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; -ms-transition: all 0.3s ease-in-out; }
 
 .card.bg-primary, .card.bg-success, .card.bg-info, .card.bg-warning, .card.bg-danger { color: #e6e5e5; }
 
@@ -2924,7 +2924,7 @@ label.success { color: #37c936; }
 
 .card:before { content: ""; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 2; visibility: hidden; opacity: 0; background: #ffffff; /* The Fallback */ background: rgba(255, 255, 255, 0.85); transition: all 0.3s ease-in-out; -webkit-transition: all 0.3s ease-in-out; -moz-transition: all 0.3s ease-in-out; -o-transition: all 0.3s ease-in-out; -ms-transition: all 0.3s ease-in-out; }
 
-.card-block { padding: 30px; }
+.card-block { padding: 20px; }
 
 .portlet { position: absolute; top: 0px; right: 0px; z-index: 1; }
 
