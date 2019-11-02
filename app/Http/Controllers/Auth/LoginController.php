@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use GuzzleHttp\Client;
-use Illuminate\Http\Request;
+use App\Http\Clients\ClientCredentialsClientInterface;
+use App\Http\Clients\PasswordClientInterface;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Clients\ClientCredentialsClientInterface;
-use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {

@@ -10,6 +10,10 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
+    var router = require('./router.js');
+
+    window.route = router.route;
+
     require('bootstrap');
 } catch (e) {}
 

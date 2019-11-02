@@ -33,3 +33,17 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 });
+
+Route::pattern('facility', $uuid);
+
+Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
+    Route::get('/', 'FacilityController@index')->name('index');
+    Route::post('/', 'FacilityController@store')->name('store');
+    Route::get('/create', 'FacilityController@create')->name('create');
+    Route::delete('/{facility}', 'FacilityController@destroy')->name('destroy');
+    Route::put('/{facility}', 'FacilityController@update')->name('update');
+    Route::get('/{facility}', 'FacilityController@show')->name('show');
+    Route::get('/{facility}/edit', 'FacilityController@edit')->name('edit');
+    Route::put('/{facility}/restore', 'FacilityController@restore')->name('restore');
+    Route::put('/{facility}/revoke', 'FacilityController@revoke')->name('revoke');
+});

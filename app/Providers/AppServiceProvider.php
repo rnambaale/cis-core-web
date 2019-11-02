@@ -2,22 +2,22 @@
 
 namespace App\Providers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\MessageFormatter;
-use App\Http\Clients\PasswordClient;
-use Illuminate\Support\ServiceProvider;
-use App\Repositories\SessionTokenRepository;
 use App\Http\Clients\ClientCredentialsClient;
+use App\Http\Clients\ClientCredentialsClientInterface;
+use App\Http\Clients\PasswordClient;
 use App\Http\Clients\PasswordClientInterface;
-use Bmatovu\OAuthNegotiator\OAuth2Middleware;
+use App\Repositories\SessionTokenRepository;
+use Bmatovu\OAuthNegotiator\GrantTypes\ClientCredentials;
 use Bmatovu\OAuthNegotiator\GrantTypes\Password;
 use Bmatovu\OAuthNegotiator\GrantTypes\RefreshToken;
-use App\Http\Clients\ClientCredentialsClientInterface;
-use Bmatovu\OAuthNegotiator\GrantTypes\ClientCredentials;
+use Bmatovu\OAuthNegotiator\OAuth2Middleware;
 use Bmatovu\OAuthNegotiator\Repositories\FileTokenRepository;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use App\Http\Clients\ClientCredentialsClientInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ResetPasswordController extends Controller
 {

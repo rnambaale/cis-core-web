@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use Bmatovu\OAuthNegotiator\Models\Token;
 use Bmatovu\OAuthNegotiator\Exceptions\TokenNotFoundException;
+use Bmatovu\OAuthNegotiator\Models\Token;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 /**

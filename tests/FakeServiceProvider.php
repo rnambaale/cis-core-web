@@ -2,12 +2,12 @@
 
 namespace Tests;
 
+use App\Http\Clients\ClientCredentialsClient;
+use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Clients\PasswordClient;
+use App\Http\Clients\PasswordClientInterface;
 use App\Providers\AppServiceProvider;
 use App\Repositories\SessionTokenRepository;
-use App\Http\Clients\ClientCredentialsClient;
-use App\Http\Clients\PasswordClientInterface;
-use App\Http\Clients\ClientCredentialsClientInterface;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 
 class FakeServiceProvider extends AppServiceProvider

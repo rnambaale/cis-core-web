@@ -1,0 +1,22 @@
+{
+    "": "login",
+    "home": "\/",
+    "login": "login",
+    "logout": "logout",
+    "password.request": "password\/reset",
+    "password.email": "password\/email",
+    "password.reset": "password\/reset\/{token}",
+    "password.update": "password\/reset",
+    "verification.notice": "email\/verify",
+    "verification.verify": "email\/verify\/{id}\/{hash}",
+    "verification.resend": "email\/resend",
+    "facilities.index": "facilities",
+    "facilities.store": "facilities",
+    "facilities.create": "facilities\/create",
+    "facilities.destroy": "facilities\/{facility}",
+    "facilities.update": "facilities\/{facility}",
+    "facilities.show": "facilities\/{facility}",
+    "facilities.edit": "facilities\/{facility}\/edit",
+    "facilities.restore": "facilities\/{facility}\/restore",
+    "facilities.revoke": "facilities\/{facility}\/revoke"
+}

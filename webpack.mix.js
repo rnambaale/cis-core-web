@@ -14,7 +14,7 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
 
-mix.css('resources/css/espire.css', 'public/css/espire.css');
+mix.copy('resources/css/espire.css', 'public/css/espire.css');
 
 mix.js('resources/js/espire.js', 'public/js/espire.js');
 

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Bmatovu\OAuthNegotiator\Models\TokenInterface;
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Token extends BaseModel implements TokenInterface
 {
