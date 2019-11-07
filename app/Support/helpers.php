@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 if (! function_exists('auth_can')) {
     /**
      * Determine if a user has permission to perform a certain action.
@@ -62,5 +65,31 @@ if (! function_exists('auth_any')) {
         $categories = app('session')->get('categories', []);
 
         return in_array($category, $categories);
+    }
+}
+
+if (! function_exists('paginate')) {
+    /**
+     * Paginate api api dataset.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param object                   $apiDataset
+     *
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
+    function paginate(Request $request, object $apiDataset): LengthAwarePaginator
+    {
+        $options = [
+            'path' => $request->url(),
+            'pageName' => 'page',
+        ];
+
+        return new LengthAwarePaginator(
+            $apiDataset->data,
+            $apiDataset->total,
+            $apiDataset->per_page,
+            $apiDataset->current_page,
+            $options
+        );
     }
 }
