@@ -121,6 +121,9 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="d-flex justify-content-center">
+                            {{ $facilities->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

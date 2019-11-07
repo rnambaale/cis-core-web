@@ -30,15 +30,25 @@ class FacilityController extends Controller
     /**
      * Show facilities.
      *
+     * @param \Illuminate\http\Request $request
+     *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $apiResponse = $this->passwordClient->get('facilities');
+        $apiResponse = $this->passwordClient->get('facilities', [
+            'query' => [
+                'paginate' => true,
+                'limit' => 10,
+                'page' => $request->page,
+            ],
+        ]);
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        return view('facilities.index', ['facilities' => $body->facilities]);
+        $paginated = paginate($request, $body->facilities);
+
+        return view('facilities.index', ['facilities' => $paginated]);
     }
 
     /**
