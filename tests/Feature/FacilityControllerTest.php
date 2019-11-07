@@ -24,18 +24,31 @@ class FacilityControllerTest extends TestCase
     {
         $fakeApiResponseBody = [
             'facilities' => [
-                [
-                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                    'name' => 'Mulago Hospital',
-                    'description' => 'Regional Referral Hospital',
-                    'address' => 'Mulago Hill',
-                    'email' => 'info@mulago.com',
-                    'website' => 'https://mulago.ug',
-                    'phone' => '+256754954852',
-                    'created_at' => '2019-10-15 16:50:47',
-                    'updated_at' => '2019-10-15 16:50:47',
-                    'deleted_at' => null,
+                'current_page' => 1,
+                'data' => [
+                    [
+                        'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                        'name' => 'Mulago Hospital',
+                        'description' => 'Regional Referral Hospital',
+                        'address' => 'Mulago Hill',
+                        'email' => 'info@mulago.com',
+                        'website' => 'https://mulago.ug',
+                        'phone' => '+256754954852',
+                        'created_at' => '2019-10-15 16:50:47',
+                        'updated_at' => '2019-10-15 16:50:47',
+                        'deleted_at' => null,
+                    ],
                 ],
+                'first_page_url' => 'http://api.test/v1/facilities?page=1',
+                'from' => 1,
+                'last_page' => 1,
+                'last_page_url' => 'http://api.test/v1/facilities?page=1',
+                'next_page_url' => null,
+                'path' => 'http://api.test/v1/facilities',
+                'per_page' => 15,
+                'prev_page_url' => null,
+                'to' => 1,
+                'total' => 1,
             ],
         ];
 
