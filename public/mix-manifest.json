@@ -4,5 +4,7 @@
     "/js/espire.js": "/js/espire.js",
     "/css/espire.css": "/css/espire.css",
     "/vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js": "/vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js",
-    "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css": "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css"
+    "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css": "/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css",
+    "/vendor/datatables.net-buttons/js/buttons.html5.min.js": "/vendor/datatables.net-buttons/js/buttons.html5.min.js",
+    "/vendor/jszip/dist/jszip.min.js": "/vendor/jszip/dist/jszip.min.js"
 }
