@@ -38,6 +38,8 @@ Route::pattern('facility', $uuid);
 
 Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
     Route::get('/', 'FacilityController@index')->name('index');
+    Route::get('/dt', 'FacilityController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'FacilityController@datatables')->name('dt');
     Route::post('/', 'FacilityController@store')->name('store');
     Route::get('/create', 'FacilityController@create')->name('create');
     Route::delete('/{facility}', 'FacilityController@destroy')->name('destroy');

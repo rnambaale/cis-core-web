@@ -46,9 +46,51 @@ class FacilityController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $paginated = paginate($request, $body->facilities);
+        $facilities = paginate($request, $body->facilities);
 
-        return view('facilities.index', ['facilities' => $paginated]);
+        return view('facilities.index', ['facilities' => $facilities]);
+    }
+
+    /**
+     * Show facilities via datatables.
+     *
+     * @param \Illuminate\http\Request $request
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showDatatables(Request $request)
+    {
+        $apiResponse = $this->passwordClient->get('facilities', [
+            'query' => [
+                'paginate' => true,
+                'limit' => 10,
+                'page' => $request->page,
+            ],
+        ]);
+
+        $body = json_decode($apiResponse->getBody(), false);
+
+        $facilities = paginate($request, $body->facilities);
+
+        return view('facilities.index-dt', ['facilities' => $facilities]);
+    }
+
+    /**
+     * Load facilities via datatables.
+     *
+     * @param \Illuminate\http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function datatables(Request $request)
+    {
+        $apiResponse = $this->passwordClient->get('facilities/dt', [
+            'query' => $request->query(),
+        ]);
+
+        $body = json_decode($apiResponse->getBody(), false);
+
+        return response()->json($body);
     }
 
     /**

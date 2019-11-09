@@ -11,6 +11,8 @@
     "verification.verify": "email\/verify\/{id}\/{hash}",
     "verification.resend": "email\/resend",
     "facilities.index": "facilities",
+    "facilities.dt.show": "facilities\/dt",
+    "facilities.dt": "facilities\/dt\/load",
     "facilities.store": "facilities",
     "facilities.create": "facilities\/create",
     "facilities.destroy": "facilities\/{facility}",
