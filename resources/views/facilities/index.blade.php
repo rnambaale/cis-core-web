@@ -98,22 +98,28 @@
                                                     <i class="fa fa-pencil px-1" title="Edit"></i>
                                                 </a>
                                                 @if($facility->deleted_at)
-                                                    <a href="" class="text-success" data-toggle="modal"
-                                                        data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
-                                                        data-target="#restore-facility-modal">
-                                                        <i class="fa fa-refresh px-1" title="Restore"></i>
-                                                    </a>
-                                                    <a href="#" class="text-danger" data-toggle="modal"
-                                                        data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
-                                                        data-target="#destroy-facility-modal">
-                                                        <i class="fa fa-trash px-1" title="Delete"></i>
-                                                    </a>
+                                                    @if(auth_can('facilities', 'restore'))
+                                                        <a href="" class="text-success" data-toggle="modal"
+                                                            data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
+                                                            data-target="#restore-facility-modal">
+                                                            <i class="fa fa-refresh px-1" title="Restore"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if(auth_can('facilities', 'force-delete'))
+                                                        <a href="#" class="text-danger" data-toggle="modal"
+                                                            data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
+                                                            data-target="#destroy-facility-modal">
+                                                            <i class="fa fa-trash px-1" title="Delete"></i>
+                                                        </a>
+                                                    @endif
                                                 @else
-                                                    <a href="" class="text-warning" data-toggle="modal"
-                                                        data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
-                                                         data-target="#revoke-facility-modal">
-                                                        <i class="fa fa-ban px-1" title="Revoke"></i>
-                                                    </a>
+                                                    @if(auth_can('facilities', 'force-delete'))
+                                                        <a href="" class="text-warning" data-toggle="modal"
+                                                            data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
+                                                             data-target="#revoke-facility-modal">
+                                                            <i class="fa fa-ban px-1" title="Revoke"></i>
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             </td>
                                         </tr>
