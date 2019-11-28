@@ -60,23 +60,13 @@ class FacilityController extends Controller
      */
     public function showDatatables(Request $request)
     {
-        $apiResponse = $this->passwordClient->get('facilities', [
-            'query' => [
-                'paginate' => true,
-                'limit' => 10,
-                'page' => $request->page,
-            ],
-        ]);
-
-        $body = json_decode($apiResponse->getBody(), false);
-
-        $facilities = paginate($request, $body->facilities);
-
-        return view('facilities.index-dt', ['facilities' => $facilities]);
+        return view('facilities.index-dt');
     }
 
     /**
      * Load facilities via datatables.
+     *
+     * @see http://docs.guzzlephp.org/en/5.3/quickstart.html#query-string-parameters Empty string vs. Null
      *
      * @param \Illuminate\http\Request $request
      *
