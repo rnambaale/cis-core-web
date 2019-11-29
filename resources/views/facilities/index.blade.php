@@ -113,7 +113,7 @@
                                                         </a>
                                                     @endif
                                                 @else
-                                                    @if(auth_can('facilities', 'force-delete'))
+                                                    @if(auth_can('facilities', 'soft-delete'))
                                                         <a href="" class="text-warning" data-toggle="modal"
                                                             data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"
                                                              data-target="#revoke-facility-modal">
