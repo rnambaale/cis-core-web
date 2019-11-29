@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
 @push('extra-js')
-    {{-- <script src="{{ asset('js/pages/facilities.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/pages/facilities-dt.js') }}"></script> --}}
     <script type="text/javascript">
+        var can_update = {{ auth_can('facilities', 'update') ? 1 : 0 }};
+        var can_restore = {{ auth_can('facilities', 'restore') ? 1 : 0 }};
+        var can_soft_delete = {{ auth_can('facilities', 'soft-delete') ? 1 : 0 }};
+        var can_force_delete = {{ auth_can('facilities', 'force-delete') ? 1 : 0 }};
+
         $(document).ready(function () {
             var facilities_dt = $('table[id=facilities]').DataTable({
                 pageLength: 10,
@@ -20,7 +25,12 @@
                 serverSide: true,
                 ajax: {
                     type: 'GET',
-                    url: route('facilities.dt')
+                    url: route('facilities.dt'),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    dataType: 'json'
                     // success: function(response) {
                     //     console.log(response);
                     // }
@@ -75,13 +85,24 @@
 
                             // ...
 
-                            var action = edit;
+                            var action = '';
+
+                            if(can_update) {
+                                action = edit;
+                            }
 
                             if(row.deleted_at) {
-                                action += restore;
-                                action += forceDelete;
+                                if(can_restore) {
+                                    action += restore;
+                                }
+
+                                if(can_force_delete) {
+                                    action += forceDelete;
+                                }
                             } else {
-                                action += softDelete;
+                                if(can_soft_delete) {
+                                    action += softDelete;
+                                }
                             }
 
                             return action;

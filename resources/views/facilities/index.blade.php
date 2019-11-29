@@ -94,9 +94,11 @@
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('facilities.edit', $facility->id) }}" class="text-info">
-                                                    <i class="fa fa-pencil px-1" title="Edit"></i>
-                                                </a>
+                                                @if(auth_can('facilities', 'update'))
+                                                    <a href="{{ route('facilities.edit', $facility->id) }}" class="text-info">
+                                                        <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                    </a>
+                                                @endif
                                                 @if($facility->deleted_at)
                                                     @if(auth_can('facilities', 'restore'))
                                                         <a href="" class="text-success" data-toggle="modal"

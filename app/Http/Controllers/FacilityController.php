@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Clients\PasswordClientInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
@@ -32,10 +33,16 @@ class FacilityController extends Controller
      *
      * @param \Illuminate\http\Request $request
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
+        if (! auth_can('facilities', 'view-any')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->get('facilities', [
             'query' => [
                 'paginate' => true,
@@ -54,12 +61,16 @@ class FacilityController extends Controller
     /**
      * Show facilities via datatables.
      *
-     * @param \Illuminate\http\Request $request
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function showDatatables(Request $request)
+    public function showDatatables()
     {
+        if (! auth_can('facilities', 'view-any')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         return view('facilities.index-dt');
     }
 
@@ -70,10 +81,17 @@ class FacilityController extends Controller
      *
      * @param \Illuminate\http\Request $request
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function datatables(Request $request)
     {
+        if (! auth_can('facilities', 'view-any')) {
+            // return response()->json(['error' => 'Unauthorized access.'], 403);
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->get('facilities/dt', [
             'query' => $request->query(),
         ]);
@@ -88,10 +106,16 @@ class FacilityController extends Controller
      *
      * @param string $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function show($facilityId)
     {
+        if (! auth_can('facilities', 'view')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->get("facilities/{$facilityId}");
 
         $facility = json_decode($apiResponse->getBody(), false);
@@ -102,10 +126,16 @@ class FacilityController extends Controller
     /**
      * Show create facility.
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function create()
     {
+        if (! auth_can('facilities', 'create')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         return view('facilities.create');
     }
 
@@ -114,10 +144,16 @@ class FacilityController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function store(Request $request)
     {
+        if (! auth_can('facilities', 'create')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->post('facilities', [
             'json' => $request->all(),
         ]);
@@ -134,10 +170,16 @@ class FacilityController extends Controller
      *
      * @param string $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function edit($facilityId)
     {
+        if (! auth_can('facilities', 'update')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->get("facilities/{$facilityId}");
 
         $facility = json_decode($apiResponse->getBody(), false);
@@ -151,10 +193,16 @@ class FacilityController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param string                   $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function update(Request $request, $facilityId)
     {
+        if (! auth_can('facilities', 'update')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->put("facilities/{$facilityId}", [
             'json' => $request->all(),
         ]);
@@ -171,10 +219,16 @@ class FacilityController extends Controller
      *
      * @param string $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function revoke($facilityId)
     {
+        if (! auth_can('facilities', 'soft-delete')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->put("facilities/{$facilityId}/revoke");
 
         $facility = json_decode($apiResponse->getBody(), false);
@@ -189,10 +243,16 @@ class FacilityController extends Controller
      *
      * @param string $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\View\View
      */
     public function restore($facilityId)
     {
+        if (! auth_can('facilities', 'restore')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $apiResponse = $this->passwordClient->put("facilities/{$facilityId}/restore");
 
         $facility = json_decode($apiResponse->getBody(), false);
@@ -207,10 +267,16 @@ class FacilityController extends Controller
      *
      * @param string $facilityId
      *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($facilityId)
     {
+        if (! auth_can('facilities', 'force-delete')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
         $this->passwordClient->delete("facilities/{$facilityId}");
 
         flash('Facility deleted.')->error();
