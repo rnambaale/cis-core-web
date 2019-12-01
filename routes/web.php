@@ -49,3 +49,19 @@ Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
     Route::put('/{facility}/restore', 'FacilityController@restore')->name('restore');
     Route::put('/{facility}/revoke', 'FacilityController@revoke')->name('revoke');
 });
+
+Route::pattern('user', $uuid);
+
+Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+    Route::get('/', 'UserController@index')->name('index');
+    Route::get('/dt', 'UserController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'UserController@datatables')->name('dt');
+    Route::post('/', 'UserController@store')->name('store');
+    Route::get('/create', 'UserController@create')->name('create');
+    Route::delete('/{user}', 'UserController@destroy')->name('destroy');
+    Route::put('/{user}', 'UserController@update')->name('update');
+    Route::get('/{user}', 'UserController@show')->name('show');
+    Route::get('/{user}/edit', 'UserController@edit')->name('edit');
+    Route::put('/{user}/restore', 'UserController@restore')->name('restore');
+    Route::put('/{user}/revoke', 'UserController@revoke')->name('revoke');
+});

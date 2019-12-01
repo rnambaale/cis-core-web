@@ -20,5 +20,16 @@
     "facilities.show": "facilities\/{facility}",
     "facilities.edit": "facilities\/{facility}\/edit",
     "facilities.restore": "facilities\/{facility}\/restore",
-    "facilities.revoke": "facilities\/{facility}\/revoke"
+    "facilities.revoke": "facilities\/{facility}\/revoke",
+    "users.index": "users",
+    "users.dt.show": "users\/dt",
+    "users.dt": "users\/dt\/load",
+    "users.store": "users",
+    "users.create": "users\/create",
+    "users.destroy": "users\/{user}",
+    "users.update": "users\/{user}",
+    "users.show": "users\/{user}",
+    "users.edit": "users\/{user}\/edit",
+    "users.restore": "users\/{user}\/restore",
+    "users.revoke": "users\/{user}\/revoke"
 }

@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
 @push('extra-js')
-    {{-- <script src="{{ asset('js/pages/facilities-dt.js') }}"></script> --}}
+    {{-- <script src="{{ asset('js/pages/users-dt.js') }}"></script> --}}
     <script type="text/javascript">
-        var can_update = {{ auth_can('facilities', 'update') ? 1 : 0 }};
-        var can_restore = {{ auth_can('facilities', 'restore') ? 1 : 0 }};
-        var can_soft_delete = {{ auth_can('facilities', 'soft-delete') ? 1 : 0 }};
-        var can_force_delete = {{ auth_can('facilities', 'force-delete') ? 1 : 0 }};
+        var can_update = {{ auth_can('users', 'update') ? 1 : 0 }};
+        var can_restore = {{ auth_can('users', 'restore') ? 1 : 0 }};
+        var can_soft_delete = {{ auth_can('users', 'soft-delete') ? 1 : 0 }};
+        var can_force_delete = {{ auth_can('users', 'force-delete') ? 1 : 0 }};
 
         $(document).ready(function () {
-            var facilities_dt = $('table[id=facilities]').DataTable({
+            var users_dt = $('table[id=users]').DataTable({
                 pageLength: 10,
                 language: {
-                    emptyTable: "No facilities available",
-                    info: "Showing _START_ to _END_ of _TOTAL_ facilities",
-                    infoEmpty: "Showing 0 to 0 of 0 facilities",
-                    infoFiltered: "(filtered from _MAX_ total facilities)",
-                    lengthMenu: "Show _MENU_ facilities",
-                    search: "Search facilities:",
-                    zeroRecords: "No facilities match search criteria"
+                    emptyTable: "No users available",
+                    info: "Showing _START_ to _END_ of _TOTAL_ users",
+                    infoEmpty: "Showing 0 to 0 of 0 users",
+                    infoFiltered: "(filtered from _MAX_ total users)",
+                    lengthMenu: "Show _MENU_ users",
+                    search: "Search users:",
+                    zeroRecords: "No users match search criteria"
                 },
                 order: [[1, 'asc']],
                 processing: true,
                 serverSide: true,
                 ajax: {
                     type: 'GET',
-                    url: route('facilities.dt'),
+                    url: route('users.dt'),
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
@@ -38,36 +38,41 @@
                 columnDefs: [
                     {
                         targets: 0,
-                        name: 'facilities.id',
+                        name: 'users.id',
                         data: 'id',
                         visible: false
                     },
                     {
                         targets: 1,
-                        name: 'facilities.name',
-                        data: 'name',
+                        name: 'users.alias',
+                        data: 'alias',
                         render: function (data, type, row, meta) {
-                            return '<a href="'+route('facilities.show', row.id)+'">'+data+'</a>'
+                            return '<a href="'+route('users.show', row.id)+'">'+data+'</a>'
                         }
                     },
                     {
                         targets: 2,
-                        name: 'facilities.email',
-                        data: 'email'
+                        name: 'users.name',
+                        data: 'name'
                     },
                     {
                         targets: 3,
-                        name: 'facilities.website',
-                        data: 'website'
+                        name: 'users.email',
+                        data: 'email'
                     },
                     {
                         targets: 4,
-                        name: 'facilities.deleted_at',
+                        name: 'roles.name',
+                        data: 'role.name'
+                    },
+                    {
+                        targets: 5,
+                        name: 'users.deleted_at',
                         data: 'deleted_at',
                         visible: false
                     },
                     {
-                        targets: 5,
+                        targets: 6,
                         name: null,
                         data: null,
                         orderable: false,
@@ -75,13 +80,13 @@
                         class: 'text-center',
                         render: function (data, type, row, meta) {
 
-                            var edit = '<a href="'+route('facilities.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
+                            var edit = '<a href="'+route('users.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
 
-                            var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-facility-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
+                            var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-user-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 
-                            var restore = '<a href="" class="text-success" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#restore-facility-modal"><i class="fa fa-refresh px-1" title="Restore"></i></a>';
+                            var restore = '<a href="" class="text-success" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#restore-user-modal"><i class="fa fa-refresh px-1" title="Restore"></i></a>';
 
-                            var forceDelete = '<a href="#" class="text-danger" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#destroy-facility-modal"><i class="fa fa-trash px-1" title="Delete"></i></a>';
+                            var forceDelete = '<a href="#" class="text-danger" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#destroy-user-modal"><i class="fa fa-trash px-1" title="Delete"></i></a>';
 
                             // ...
 
@@ -127,7 +132,7 @@
                             clearInterval(searchWaitInterval);
                             searchWaitInterval = '';
                             searchTerm = $(item).val();
-                            // facilities_dt.search(searchTerm).draw();
+                            // users_dt.search(searchTerm).draw();
                             // console.log({"value": searchTerm});
                             searchWait = 0;
                         }
@@ -135,41 +140,41 @@
                     }, 300);
                 });
 
-            $("#revoke-facility-modal").on("show.bs.modal", function (event) {
+            $("#revoke-user-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#revoke_facility");
+                var form = $(this).find("form#revoke_user");
 
-                form.attr('action', route('facilities.revoke', id));
+                form.attr('action', route('users.revoke', id));
 
                 form.find('span#name').text(name);
             });
 
-            $("#restore-facility-modal").on("show.bs.modal", function (event) {
+            $("#restore-user-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#restore_facility");
+                var form = $(this).find("form#restore_user");
 
-                form.attr('action', route('facilities.restore', id));
+                form.attr('action', route('users.restore', id));
 
                 form.find('span#name').text(name);
             });
 
-            $("#destroy-facility-modal").on("show.bs.modal", function (event) {
+            $("#destroy-user-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#destroy_facility");
+                var form = $(this).find("form#destroy_user");
 
-                form.attr('action', route('facilities.destroy', id));
+                form.attr('action', route('users.destroy', id));
 
                 form.find('span#name').text(name);
             });
@@ -183,7 +188,7 @@
     <div class="container-fluid">
 
         <div class="page-title">
-            <h4>Facilities</h4>
+            <h4>Users</h4>
         </div>
 
         <div class="row">
@@ -197,16 +202,15 @@
                 <div class="card">
                     <div class="card-block">
                         <div class="table-overflow">
-                            <table id="facilities" class="table table-striped table-hover no-wrap" style="width: 100%;">
-                                <caption>List of facilities.</caption>
+                            <table id="users" class="table table-striped table-hover no-wrap" style="width: 100%;">
+                                <caption>List of users.</caption>
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Alias</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Website</th>
-                                    {{-- <th>Created At</th> --}}
-                                    {{-- <th>Updated At</th> --}}
+                                    <th>Role</th>
                                     <th>Deleted At</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -222,8 +226,8 @@
     </div>
 </div>
 
-@include('facilities.modals.revoke')
-@include('facilities.modals.restore')
-@include('facilities.modals.destroy')
+{{-- @include('users.modals.revoke') --}}
+{{-- @include('users.modals.restore') --}}
+{{-- @include('users.modals.destroy') --}}
 
 @endsection

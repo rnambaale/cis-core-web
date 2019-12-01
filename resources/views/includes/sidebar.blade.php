@@ -54,7 +54,7 @@
                         @endif
                         @if(auth_has('users'))
                             <li>
-                                <a href="#">Users</a>
+                                <a href="{{ route('users.index') }}">Users</a>
                             </li>
                         @endif
                     </ul>
