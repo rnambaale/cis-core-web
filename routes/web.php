@@ -33,3 +33,35 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 });
+
+Route::pattern('facility', $uuid);
+
+Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
+    Route::get('/', 'FacilityController@index')->name('index');
+    Route::get('/dt', 'FacilityController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'FacilityController@datatables')->name('dt');
+    Route::post('/', 'FacilityController@store')->name('store');
+    Route::get('/create', 'FacilityController@create')->name('create');
+    Route::delete('/{facility}', 'FacilityController@destroy')->name('destroy');
+    Route::put('/{facility}', 'FacilityController@update')->name('update');
+    Route::get('/{facility}', 'FacilityController@show')->name('show');
+    Route::get('/{facility}/edit', 'FacilityController@edit')->name('edit');
+    Route::put('/{facility}/restore', 'FacilityController@restore')->name('restore');
+    Route::put('/{facility}/revoke', 'FacilityController@revoke')->name('revoke');
+});
+
+Route::pattern('user', $uuid);
+
+Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+    Route::get('/', 'UserController@index')->name('index');
+    Route::get('/dt', 'UserController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'UserController@datatables')->name('dt');
+    Route::post('/', 'UserController@store')->name('store');
+    Route::get('/create', 'UserController@create')->name('create');
+    Route::delete('/{user}', 'UserController@destroy')->name('destroy');
+    Route::put('/{user}', 'UserController@update')->name('update');
+    Route::get('/{user}', 'UserController@show')->name('show');
+    Route::get('/{user}/edit', 'UserController@edit')->name('edit');
+    Route::put('/{user}/restore', 'UserController@restore')->name('restore');
+    Route::put('/{user}/revoke', 'UserController@revoke')->name('revoke');
+});

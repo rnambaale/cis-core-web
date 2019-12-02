@@ -47,6 +47,12 @@ Upload public key; *id_rsa.pub*, to Github for authentication
 
 `cis-core-web# php artisan storage:link`
 
+### [Other prerequisites]
+
+Generate JS routes.
+
+`php artisan routes:json`
+
 ### Install & compile NodeJS dependencies
 
 `cis-core-web# npm install && npm run dev`

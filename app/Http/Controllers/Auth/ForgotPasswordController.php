@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
+use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\Validator;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Validation\ValidationException;
-use App\Http\Clients\ClientCredentialsClientInterface;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
