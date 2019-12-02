@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Repositories;
 
-use Tests\TestCase;
 use App\Repositories\SessionTokenRepository;
-use Bmatovu\OAuthNegotiator\Models\TokenInterface;
 use Bmatovu\OAuthNegotiator\Exceptions\TokenNotFoundException;
+use Bmatovu\OAuthNegotiator\Models\TokenInterface;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
+use Tests\TestCase;
 
 /**
  * @see \App\Repositories\SessionTokenRepository

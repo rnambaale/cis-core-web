@@ -2,17 +2,17 @@
 
 namespace Tests\Feature\Auth;
 
-use Carbon\Carbon;
-use Tests\TestCase;
+use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Models\User;
-use Ramsey\Uuid\Uuid;
+use Carbon\Carbon;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Http\Clients\ClientCredentialsClientInterface;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
+use Ramsey\Uuid\Uuid;
+use Tests\TestCase;
 
 /**
  * @see \App\Http\Controllers\Auth\VerificationController
