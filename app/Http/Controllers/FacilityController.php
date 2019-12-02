@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Clients\PasswordClientInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class FacilityController extends Controller
