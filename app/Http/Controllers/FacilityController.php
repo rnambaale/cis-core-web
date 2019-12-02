@@ -38,7 +38,7 @@ class FacilityController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth_can('facilities', 'view-any')) {
+        if (! auth_can('facilities', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -66,7 +66,7 @@ class FacilityController extends Controller
      */
     public function showDatatables()
     {
-        if (!auth_can('facilities', 'view-any')) {
+        if (! auth_can('facilities', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -86,7 +86,7 @@ class FacilityController extends Controller
      */
     public function datatables(Request $request)
     {
-        if (!auth_can('facilities', 'view-any')) {
+        if (! auth_can('facilities', 'view-any')) {
             // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
@@ -111,7 +111,7 @@ class FacilityController extends Controller
      */
     public function show($facilityId)
     {
-        if (!auth_can('facilities', 'view')) {
+        if (! auth_can('facilities', 'view')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -131,7 +131,7 @@ class FacilityController extends Controller
      */
     public function create()
     {
-        if (!auth_can('facilities', 'create')) {
+        if (! auth_can('facilities', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -149,7 +149,7 @@ class FacilityController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth_can('facilities', 'create')) {
+        if (! auth_can('facilities', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -175,7 +175,7 @@ class FacilityController extends Controller
      */
     public function edit($facilityId)
     {
-        if (!auth_can('facilities', 'update')) {
+        if (! auth_can('facilities', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -198,7 +198,7 @@ class FacilityController extends Controller
      */
     public function update(Request $request, $facilityId)
     {
-        if (!auth_can('facilities', 'update')) {
+        if (! auth_can('facilities', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -224,7 +224,7 @@ class FacilityController extends Controller
      */
     public function revoke($facilityId)
     {
-        if (!auth_can('facilities', 'soft-delete')) {
+        if (! auth_can('facilities', 'soft-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -248,7 +248,7 @@ class FacilityController extends Controller
      */
     public function restore($facilityId)
     {
-        if (!auth_can('facilities', 'restore')) {
+        if (! auth_can('facilities', 'restore')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -272,7 +272,7 @@ class FacilityController extends Controller
      */
     public function destroy($facilityId)
     {
-        if (!auth_can('facilities', 'force-delete')) {
+        if (! auth_can('facilities', 'force-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
