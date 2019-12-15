@@ -39,7 +39,7 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth_can('roles', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -67,7 +67,7 @@ class RoleController extends Controller
      */
     public function showDatatables()
     {
-        if (!auth_can('roles', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -87,7 +87,7 @@ class RoleController extends Controller
      */
     public function datatables(Request $request)
     {
-        if (!auth_can('roles', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
@@ -112,7 +112,7 @@ class RoleController extends Controller
      */
     public function show($roleId)
     {
-        if (!auth_can('roles', 'view')) {
+        if (! auth_can('roles', 'view')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -132,7 +132,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        if (!auth_can('roles', 'create')) {
+        if (! auth_can('roles', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -150,7 +150,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth_can('roles', 'create')) {
+        if (! auth_can('roles', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -176,7 +176,7 @@ class RoleController extends Controller
      */
     public function edit($roleId)
     {
-        if (!auth_can('roles', 'update')) {
+        if (! auth_can('roles', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -199,7 +199,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $roleId)
     {
-        if (!auth_can('roles', 'update')) {
+        if (! auth_can('roles', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -225,7 +225,7 @@ class RoleController extends Controller
      */
     public function revoke($roleId)
     {
-        if (!auth_can('roles', 'soft-delete')) {
+        if (! auth_can('roles', 'soft-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -249,7 +249,7 @@ class RoleController extends Controller
      */
     public function restore($roleId)
     {
-        if (!auth_can('roles', 'restore')) {
+        if (! auth_can('roles', 'restore')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -273,7 +273,7 @@ class RoleController extends Controller
      */
     public function destroy($roleId)
     {
-        if (!auth_can('roles', 'force-delete')) {
+        if (! auth_can('roles', 'force-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
