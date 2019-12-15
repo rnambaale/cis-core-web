@@ -52,6 +52,7 @@
 
         <div class="page-title">
             <h4>Users</h4>
+            <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
         </div>
 
         <div class="row">
@@ -137,8 +138,8 @@
     </div>
 </div>
 
-{{-- @include('users.modals.revoke') --}}
-{{-- @include('users.modals.restore') --}}
-{{-- @include('users.modals.destroy') --}}
+@include('users.modals.revoke')
+@include('users.modals.restore')
+@include('users.modals.destroy')
 
 @endsection

@@ -280,7 +280,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', (object) $fakeApiResponseBody);
     }
 
     public function test_can_delete_role()
