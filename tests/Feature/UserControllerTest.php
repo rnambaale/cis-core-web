@@ -30,7 +30,7 @@ class UserControllerTest extends TestCase
                         'name' => 'John Doe',
                         'alias' => 'Jdoe',
                         'email' => 'Jdoe@example.com',
-                        "email_verified_at" => "2018-09-30 17:06:12",
+                        'email_verified_at' => '2018-09-30 17:06:12',
                         'created_at' => '2019-10-15 16:50:47',
                         'updated_at' => '2019-10-15 16:50:47',
                         'deleted_at' => null,
@@ -71,37 +71,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
-            "deleted_at" => null,
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -139,37 +139,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
-            "deleted_at" => null,
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(201, [], json_encode($fakeApiResponseBody));
@@ -201,37 +201,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
-            "deleted_at" => null,
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -258,37 +258,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
-            "deleted_at" => null,
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -319,37 +319,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
             'deleted_at'    => '2019-10-16 09:02:58',
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -378,37 +378,37 @@ class UserControllerTest extends TestCase
         $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
 
         $fakeApiResponseBody = [
-            "id" => $userId,
-            "facility_id" => $facilityId,
-            "role_id" => $roleId,
-            "alias" => "jdoe",
-            "name" => "John Doe",
-            "email" => "jdoe@example.com",
-            "email_verified_at" => "2018-09-30 17:06:12",
-            "created_at" => "2018-09-30 09:42:23",
-            "updated_at" => "2018-10-02 14:27:09",
-            "deleted_at" => null,
-            "role" => [
-                "id" => $roleId,
-                "facility_id" => $userId,
-                "name" => "Sys Admin",
-                "description" => "System Administrator",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
+            'id' => $userId,
+            'facility_id' => $facilityId,
+            'role_id' => $roleId,
+            'alias' => 'jdoe',
+            'name' => 'John Doe',
+            'email' => 'jdoe@example.com',
+            'email_verified_at' => '2018-09-30 17:06:12',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'role' => [
+                'id' => $roleId,
+                'facility_id' => $userId,
+                'name' => 'Sys Admin',
+                'description' => 'System Administrator',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
             ],
-            "facility" => [
-                "id" => $facilityId,
-                "name" => "Mulago Hospital",
-                "description" => "Mulago Hospital",
-                "address" => "Mulago Hill",
-                "email" => "cis@mulago.Hospital",
-                "website" => "https://mulago.Hospital",
-                "phone" => "+256392741586",
-                "created_at" => "2018-09-30 09:42:23",
-                "updated_at" => "2018-10-02 14:27:09",
-                "deleted_at" => null
-            ]
+            'facility' => [
+                'id' => $facilityId,
+                'name' => 'Mulago Hospital',
+                'description' => 'Mulago Hospital',
+                'address' => 'Mulago Hill',
+                'email' => 'cis@mulago.Hospital',
+                'website' => 'https://mulago.Hospital',
+                'phone' => '+256392741586',
+                'created_at' => '2018-09-30 09:42:23',
+                'updated_at' => '2018-10-02 14:27:09',
+                'deleted_at' => null,
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));

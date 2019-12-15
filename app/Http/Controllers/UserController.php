@@ -39,7 +39,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if (!auth_can('users', 'view-any')) {
+        if (! auth_can('users', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -67,7 +67,7 @@ class UserController extends Controller
      */
     public function showDatatables()
     {
-        if (!auth_can('users', 'view-any')) {
+        if (! auth_can('users', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -87,7 +87,7 @@ class UserController extends Controller
      */
     public function datatables(Request $request)
     {
-        if (!auth_can('users', 'view-any')) {
+        if (! auth_can('users', 'view-any')) {
             // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
@@ -112,7 +112,7 @@ class UserController extends Controller
      */
     public function show($userId)
     {
-        if (!auth_can('users', 'view')) {
+        if (! auth_can('users', 'view')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -132,7 +132,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (!auth_can('users', 'create')) {
+        if (! auth_can('users', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -158,7 +158,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth_can('users', 'create')) {
+        if (! auth_can('users', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -184,7 +184,7 @@ class UserController extends Controller
      */
     public function edit($userId)
     {
-        if (!auth_can('users', 'update')) {
+        if (! auth_can('users', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -215,7 +215,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $userId)
     {
-        if (!auth_can('users', 'update')) {
+        if (! auth_can('users', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -241,7 +241,7 @@ class UserController extends Controller
      */
     public function revoke($userId)
     {
-        if (!auth_can('users', 'soft-delete')) {
+        if (! auth_can('users', 'soft-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -265,7 +265,7 @@ class UserController extends Controller
      */
     public function restore($userId)
     {
-        if (!auth_can('users', 'restore')) {
+        if (! auth_can('users', 'restore')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -289,7 +289,7 @@ class UserController extends Controller
      */
     public function destroy($userId)
     {
-        if (!auth_can('users', 'force-delete')) {
+        if (! auth_can('users', 'force-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
