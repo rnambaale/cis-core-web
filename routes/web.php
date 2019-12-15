@@ -50,6 +50,22 @@ Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
     Route::put('/{facility}/revoke', 'FacilityController@revoke')->name('revoke');
 });
 
+Route::pattern('role', $uuid);
+
+Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
+    Route::get('/', 'RoleController@index')->name('index');
+    Route::get('/dt', 'RoleController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'RoleController@datatables')->name('dt');
+    Route::post('/', 'RoleController@store')->name('store');
+    Route::get('/create', 'RoleController@create')->name('create');
+    Route::delete('/{role}', 'RoleController@destroy')->name('destroy');
+    Route::put('/{role}', 'RoleController@update')->name('update');
+    Route::get('/{role}', 'RoleController@show')->name('show');
+    Route::get('/{role}/edit', 'RoleController@edit')->name('edit');
+    Route::put('/{role}/restore', 'RoleController@restore')->name('restore');
+    Route::put('/{role}/revoke', 'RoleController@revoke')->name('revoke');
+});
+
 Route::pattern('user', $uuid);
 
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
