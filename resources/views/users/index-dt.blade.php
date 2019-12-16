@@ -187,8 +187,11 @@
 <div class="main-content">
     <div class="container-fluid">
 
-        <div class="page-title">
-            <h4>Users</h4>
+        <div class="page-title d-flex justify-content-between mb-3">
+            <h4 class="m-0">Users</h4>
+            <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary m-0">
+                <i class="fa fa-plus"></i>&nbsp;Register
+            </a>
         </div>
 
         <div class="row">

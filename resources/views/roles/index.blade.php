@@ -50,9 +50,11 @@
 <div class="main-content">
     <div class="container-fluid">
 
-        <div class="page-title">
-            <h4>Roles</h4>
-            <a href="{{ route('roles.create') }}" class="btn btn-primary">Create Role</a>
+        <div class="page-title d-flex justify-content-between mb-3">
+            <h4 class="m-0">Roles</h4>
+            <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary m-0">
+                <i class="fa fa-plus"></i>&nbsp;Register
+            </a>
         </div>
 
         <div class="row">
