@@ -6,7 +6,7 @@
 
         <div class="page-title">
             <h4>
-                <a href="{{ route('users.index') }}">Users</a>
+                <a href="{{ route('permissions.index') }}">Permissions</a>
             </h4>
         </div>
 
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('users.store') }}" autocomplete="off">
+        <form method="POST" action="{{ route('permissions.store') }}" autocomplete="off">
             @csrf
 
             <div class="row">
@@ -29,23 +29,17 @@
                                     class="form-control" value="{{ old('name') }}">
                             </div>
                             <div class="form-group">
-                                <label for="alias">Alias</label>
-                                <input type="text" name="alias" id="alias"
-                                    class="form-control" value="{{ old('alias') }}">
+                                <label for="description">Description</label>
+                                <input type="text" name="description" id="description"
+                                    class="form-control" value="{{ old('description') }}">
                             </div>
 
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" id="email"
-                                    class="form-control" value="{{ old('email') }}">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="role_id">Role</label>
-                                <select type="role_id" name="role_id" id="role_id" class="form-control" required>
+                                <label for="module_name">Module</label>
+                                <select type="module_name" name="module_name" id="module_name" class="form-control" required>
                                     <option value="">Select</option>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @foreach ($modules as $module)
+                                        <option value="{{ $module->name }}">{{ $module->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

@@ -15,6 +15,7 @@ Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
 
 $uuid = '^([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}){1}$';
 $slug = '^[a-z\d]+(?:-[a-z\d]+)*$';
+$int = '^\d+$';
 
 Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     // Authentication routes...
@@ -97,4 +98,18 @@ Route::group(['prefix' => 'modules', 'as' => 'modules.'], function () {
     Route::get('/{module}/edit', 'ModuleController@edit')->name('edit');
     Route::put('/{module}/restore', 'ModuleController@restore')->name('restore');
     Route::put('/{module}/revoke', 'ModuleController@revoke')->name('revoke');
+});
+
+Route::pattern('permission', $int);
+
+Route::group(['prefix' => 'permissions', 'as' => 'permissions.'], function () {
+    Route::get('/', 'PermissionController@index')->name('index');
+    Route::get('/dt', 'PermissionController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'PermissionController@datatables')->name('dt');
+    Route::post('/', 'PermissionController@store')->name('store');
+    Route::get('/create', 'PermissionController@create')->name('create');
+    Route::delete('/{permission}', 'PermissionController@destroy')->name('destroy');
+    Route::put('/{permission}', 'PermissionController@update')->name('update');
+    Route::get('/{permission}', 'PermissionController@show')->name('show');
+    Route::get('/{permission}/edit', 'PermissionController@edit')->name('edit');
 });

@@ -44,7 +44,7 @@
 
                             <div class="form-group">
                                 <label for="role_id">Role</label>
-                                <select type="role_id" name="role_id" id="role_id" class="form-control">
+                                <select type="role_id" name="role_id" id="role_id" class="form-control" required>
                                     <option value="">Select</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}" {{($user->role_id === $role->id) ? 'selected' : '' }} >{{ $role->name }}</option>

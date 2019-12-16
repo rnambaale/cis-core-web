@@ -53,5 +53,14 @@
     "modules.show": "modules/{module}",
     "modules.edit": "modules/{module}/edit",
     "modules.restore": "modules/{module}/restore",
-    "modules.revoke": "modules/{module}/revoke"
+    "modules.revoke": "modules/{module}/revoke",
+    "permissions.index": "permissions",
+    "permissions.dt.show": "permissions/dt",
+    "permissions.dt": "permissions/dt/load",
+    "permissions.store": "permissions",
+    "permissions.create": "permissions/create",
+    "permissions.destroy": "permissions/{permission}",
+    "permissions.update": "permissions/{permission}",
+    "permissions.show": "permissions/{permission}",
+    "permissions.edit": "permissions/{permission}/edit"
 }

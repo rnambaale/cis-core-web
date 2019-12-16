@@ -44,7 +44,7 @@
                         @endif
                         @if(auth_has('permissions'))
                             <li>
-                                <a href="#">Permissions</a>
+                                <a href="{{ route('permissions.index') }}">Permissions</a>
                             </li>
                         @endif
                         @if(auth_has('roles'))
