@@ -39,7 +39,7 @@
                         @endif
                         @if(auth_has('modules'))
                             <li>
-                                <a href="#">Modules</a>
+                                <a href="{{ route('modules.index') }}">Modules</a>
                             </li>
                         @endif
                         @if(auth_has('permissions'))

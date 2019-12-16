@@ -14,6 +14,7 @@
 Route::get('/', 'HomeController@index')->name('home')->middleware('verified');
 
 $uuid = '^([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}){1}$';
+$slug = '^[a-z\d]+(?:-[a-z\d]+)*$';
 
 Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     // Authentication routes...
@@ -80,4 +81,20 @@ Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     Route::get('/{user}/edit', 'UserController@edit')->name('edit');
     Route::put('/{user}/restore', 'UserController@restore')->name('restore');
     Route::put('/{user}/revoke', 'UserController@revoke')->name('revoke');
+});
+
+Route::pattern('module', $slug);
+
+Route::group(['prefix' => 'modules', 'as' => 'modules.'], function () {
+    Route::get('/', 'ModuleController@index')->name('index');
+    Route::get('/dt', 'ModuleController@showDatatables')->name('dt.show');
+    Route::get('/dt/load', 'ModuleController@datatables')->name('dt');
+    Route::post('/', 'ModuleController@store')->name('store');
+    Route::get('/create', 'ModuleController@create')->name('create');
+    Route::delete('/{module}', 'ModuleController@destroy')->name('destroy');
+    Route::put('/{module}', 'ModuleController@update')->name('update');
+    Route::get('/{module}', 'ModuleController@show')->name('show');
+    Route::get('/{module}/edit', 'ModuleController@edit')->name('edit');
+    Route::put('/{module}/restore', 'ModuleController@restore')->name('restore');
+    Route::put('/{module}/revoke', 'ModuleController@revoke')->name('revoke');
 });
