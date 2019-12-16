@@ -49,7 +49,7 @@
                         @endif
                         @if(auth_has('roles'))
                             <li>
-                                <a href="#">Roles</a>
+                                <a href="{{ route('roles.index') }}">Roles</a>
                             </li>
                         @endif
                         @if(auth_has('users'))

@@ -6,7 +6,7 @@ use App\Http\Clients\PasswordClientInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
      * Password client.
@@ -29,7 +29,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show users.
+     * Show roles.
      *
      * @param \Illuminate\http\Request $request
      *
@@ -39,11 +39,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if (! auth_can('users', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('users', [
+        $apiResponse = $this->passwordClient->get('roles', [
             'query' => [
                 'paginate' => true,
                 'limit' => 10,
@@ -53,13 +53,13 @@ class UserController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $users = paginate($request, $body->users);
+        $roles = paginate($request, $body->roles);
 
-        return view('users.index', ['users' => $users]);
+        return view('roles.index', ['roles' => $roles]);
     }
 
     /**
-     * Show users via datatables.
+     * Show roles via datatables.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
@@ -67,15 +67,15 @@ class UserController extends Controller
      */
     public function showDatatables()
     {
-        if (! auth_can('users', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        return view('users.index-dt');
+        return view('roles.index-dt');
     }
 
     /**
-     * Load users via datatables.
+     * Load roles via datatables.
      *
      * @see http://docs.guzzlephp.org/en/5.3/quickstart.html#query-string-parameters Empty string vs. Null
      *
@@ -87,12 +87,12 @@ class UserController extends Controller
      */
     public function datatables(Request $request)
     {
-        if (! auth_can('users', 'view-any')) {
+        if (! auth_can('roles', 'view-any')) {
             // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('users/dt', [
+        $apiResponse = $this->passwordClient->get('roles/dt', [
             'query' => $request->query(),
         ]);
 
@@ -102,29 +102,29 @@ class UserController extends Controller
     }
 
     /**
-     * Show user.
+     * Show role.
      *
-     * @param string $userId
+     * @param string $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function show($userId)
+    public function show($roleId)
     {
-        if (! auth_can('users', 'view')) {
+        if (! auth_can('roles', 'view')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get("users/{$userId}");
+        $apiResponse = $this->passwordClient->get("roles/{$roleId}");
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        return view('users.show', ['user' => $user]);
+        return view('roles.show', ['role' => $role]);
     }
 
     /**
-     * Show create user.
+     * Show create role.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
@@ -132,23 +132,15 @@ class UserController extends Controller
      */
     public function create()
     {
-        if (! auth_can('users', 'create')) {
+        if (! auth_can('roles', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('roles', [
-            'query' => [
-                'paginate' => false,
-            ],
-        ]);
-
-        $body = json_decode($apiResponse->getBody(), false);
-
-        return view('users.create', ['roles' => $body->roles]);
+        return view('roles.create');
     }
 
     /**
-     * Create user.
+     * Create role.
      *
      * @param \Illuminate\Http\Request $request
      *
@@ -158,145 +150,137 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if (! auth_can('users', 'create')) {
+        if (! auth_can('roles', 'create')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->post('users', [
+        $apiResponse = $this->passwordClient->post('roles', [
             'json' => $request->all(),
         ]);
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        flash("{$user->name} created.")->success();
+        flash("{$role->name} created.")->success();
 
-        return view('users.show', ['user' => $user]);
+        return view('roles.show', ['role' => $role]);
     }
 
     /**
-     * Show edit user.
+     * Show edit role.
      *
-     * @param string $userId
+     * @param string $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function edit($userId)
+    public function edit($roleId)
     {
-        if (! auth_can('users', 'update')) {
+        if (! auth_can('roles', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get("users/{$userId}");
+        $apiResponse = $this->passwordClient->get("roles/{$roleId}");
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        $rolesApiResponse = $this->passwordClient->get('roles', [
-            'query' => [
-                'paginate' => false,
-            ],
-        ]);
-
-        $roles = json_decode($rolesApiResponse->getBody(), false)->roles;
-
-        return view('users.edit', ['user' => $user, 'roles' => $roles]);
+        return view('roles.edit', ['role' => $role]);
     }
 
     /**
-     * Update user.
+     * Update role.
      *
      * @param \Illuminate\Http\Request $request
-     * @param string                   $userId
+     * @param string                   $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function update(Request $request, $userId)
+    public function update(Request $request, $roleId)
     {
-        if (! auth_can('users', 'update')) {
+        if (! auth_can('roles', 'update')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->put("users/{$userId}", [
+        $apiResponse = $this->passwordClient->put("roles/{$roleId}", [
             'json' => $request->all(),
         ]);
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        flash("{$user->name} updated.")->success();
+        flash("{$role->name} updated.")->success();
 
-        return view('users.show', ['user' => $user]);
+        return view('roles.show', ['role' => $role]);
     }
 
     /**
-     * Revoke user.
+     * Revoke role.
      *
-     * @param string $userId
+     * @param string $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function revoke($userId)
+    public function revoke($roleId)
     {
-        if (! auth_can('users', 'soft-delete')) {
+        if (! auth_can('roles', 'soft-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->put("users/{$userId}/revoke");
+        $apiResponse = $this->passwordClient->put("roles/{$roleId}/revoke");
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        flash("{$user->name} revoked.")->warning();
+        flash("{$role->name} revoked.")->warning();
 
-        return view('users.show', ['user' => $user]);
+        return view('roles.show', ['role' => $role]);
     }
 
     /**
-     * Restore user.
+     * Restore role.
      *
-     * @param string $userId
+     * @param string $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\View\View
      */
-    public function restore($userId)
+    public function restore($roleId)
     {
-        if (! auth_can('users', 'restore')) {
+        if (! auth_can('roles', 'restore')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->put("users/{$userId}/restore");
+        $apiResponse = $this->passwordClient->put("roles/{$roleId}/restore");
 
-        $user = json_decode($apiResponse->getBody(), false);
+        $role = json_decode($apiResponse->getBody(), false);
 
-        flash("{$user->name} restored.")->success();
+        flash("{$role->name} restored.")->success();
 
-        return view('users.show', ['user' => $user]);
+        return view('roles.show', ['role' => $role]);
     }
 
     /**
-     * Delete user.
+     * Delete role.
      *
-     * @param string $userId
+     * @param string $roleId
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($userId)
+    public function destroy($roleId)
     {
-        if (! auth_can('users', 'force-delete')) {
+        if (! auth_can('roles', 'force-delete')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $this->passwordClient->delete("users/{$userId}");
+        $this->passwordClient->delete("roles/{$roleId}");
 
-        flash('user deleted.')->error();
+        flash('role deleted.')->error();
 
-        return redirect()->route('users.index');
+        return redirect()->route('roles.index');
     }
 }

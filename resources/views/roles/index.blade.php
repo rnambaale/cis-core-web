@@ -3,41 +3,41 @@
 @push('extra-js')
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#revoke-user-modal").on("show.bs.modal", function (event) {
+            $("#revoke-role-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#revoke_user");
+                var form = $(this).find("form#revoke_role");
 
-                form.attr('action', route('users.revoke', id));
+                form.attr('action', route('roles.revoke', id));
 
                 form.find('span#name').text(name);
             });
 
-            $("#restore-user-modal").on("show.bs.modal", function (event) {
+            $("#restore-role-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#restore_user");
+                var form = $(this).find("form#restore_role");
 
-                form.attr('action', route('users.restore', id));
+                form.attr('action', route('roles.restore', id));
 
                 form.find('span#name').text(name);
             });
 
-            $("#destroy-user-modal").on("show.bs.modal", function (event) {
+            $("#destroy-role-modal").on("show.bs.modal", function (event) {
                 var relatedTarget = $(event.relatedTarget);
 
                 var id = relatedTarget.data("id");
                 var name = relatedTarget.data("name");
 
-                var form = $(this).find("form#destroy_user");
+                var form = $(this).find("form#destroy_role");
 
-                form.attr('action', route('users.destroy', id));
+                form.attr('action', route('roles.destroy', id));
 
                 form.find('span#name').text(name);
             });
@@ -51,8 +51,8 @@
     <div class="container-fluid">
 
         <div class="page-title">
-            <h4>Users</h4>
-            <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>
+            <h4>Roles</h4>
+            <a href="{{ route('roles.create') }}" class="btn btn-primary">Create Role</a>
         </div>
 
         <div class="row">
@@ -67,57 +67,52 @@
                     <div class="card-block">
                         <div class="table-overflow">
                             <table id="users" class="table table-striped table-hover no-wrap">
-                                <caption>List of users.</caption>
+                                <caption>List of roles.</caption>
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Website</th>
+                                    <th>Description</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($users as $user)
-                                        <tr class="@if($user->deleted_at) strike-through @endif">
+                                    @foreach($roles as $role)
+                                        <tr class="@if($role->deleted_at) strike-through @endif">
                                             <td>
-                                                <a href="{{ route('users.show', $user->id) }}">
-                                                    {{ $user->alias }}
+                                                <a href="{{ route('roles.show', $role->id) }}">
+                                                    {{ $role->name }}
                                                 </a>
                                             </td>
                                             <td>
-                                                {{ $user->name }}
-                                            </td>
-                                            <td>
-                                                <a href="mailto:{{ $user->email }}">
-                                                    {{ $user->email }}
-                                                </a>
+                                                {{ $role->description }}
                                             </td>
                                             <td class="text-center">
-                                                @if(auth_can('users', 'update'))
-                                                    <a href="{{ route('users.edit', $user->id) }}" class="text-info">
-                                                        <i class="fa fa-pencil px-1" title="Edit"></i>
-                                                    </a>
-                                                @endif
-                                                @if($user->deleted_at)
-                                                    @if(auth_can('users', 'restore'))
+                                                @if($role->deleted_at)
+                                                    @if(auth_can('roles', 'restore'))
                                                         <a href="" class="text-success" data-toggle="modal"
-                                                            data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                                            data-target="#restore-user-modal">
+                                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}"
+                                                            data-target="#restore-role-modal">
                                                             <i class="fa fa-refresh px-1" title="Restore"></i>
                                                         </a>
                                                     @endif
-                                                    @if(auth_can('users', 'force-delete'))
+                                                    @if(auth_can('roles', 'force-delete'))
                                                         <a href="#" class="text-danger" data-toggle="modal"
-                                                            data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                                            data-target="#destroy-user-modal">
+                                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}"
+                                                            data-target="#destroy-role-modal">
                                                             <i class="fa fa-trash px-1" title="Delete"></i>
                                                         </a>
                                                     @endif
                                                 @else
-                                                    @if(auth_can('users', 'soft-delete'))
+                                                    @if(auth_can('roles', 'update'))
+                                                        <a href="{{ route('roles.edit', $role->id) }}" class="text-info">
+                                                            <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if(auth_can('roles', 'soft-delete'))
                                                         <a href="" class="text-warning" data-toggle="modal"
-                                                            data-id="{{ $user->id }}" data-name="{{ $user->name }}"
-                                                             data-target="#revoke-user-modal">
+                                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}"
+                                                             data-target="#revoke-role-modal">
                                                             <i class="fa fa-ban px-1" title="Revoke"></i>
                                                         </a>
                                                     @endif
@@ -129,7 +124,7 @@
                             </table>
                         </div>
                         <div class="d-flex justify-content-center">
-                            {{ $users->links() }}
+                            {{ $roles->links() }}
                         </div>
                     </div>
                 </div>
@@ -138,8 +133,8 @@
     </div>
 </div>
 
-@include('users.modals.revoke')
-@include('users.modals.restore')
-@include('users.modals.destroy')
+@include('roles.modals.revoke')
+@include('roles.modals.restore')
+@include('roles.modals.destroy')
 
 @endsection
