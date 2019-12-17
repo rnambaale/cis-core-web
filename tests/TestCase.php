@@ -83,7 +83,7 @@ abstract class TestCase extends BaseTestCase
         $this->app['session']->put('modules', [
             $module => [
                 $permission,
-            ]
+            ],
         ]);
     }
 }

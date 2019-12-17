@@ -80,18 +80,18 @@ class FacilityControllerTest extends TestCase
     public function test_can_show_facilities_via_datatables()
     {
         $fakeApiResponseBody = [
-            "draw" => 1,
-            "recordsTotal" => 1,
-            "recordsFiltered" => 1,
-            "data" => [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
                 [
-                    "id" => "fca59526-912d-4a82-b775-d4ec7d9b33c1",
-                    "name" => "Ismael Johnson",
-                    "email" => "lysanne76@example.net",
-                    "website" => "example.net",
-                    "deleted_at" => null,
-                ]
-            ]
+                    'id' => 'fca59526-912d-4a82-b775-d4ec7d9b33c1',
+                    'name' => 'Ismael Johnson',
+                    'email' => 'lysanne76@example.net',
+                    'website' => 'example.net',
+                    'deleted_at' => null,
+                ],
+            ],
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
