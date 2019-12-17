@@ -69,4 +69,21 @@ abstract class TestCase extends BaseTestCase
             ],
         ]);
     }
+
+    /**
+     * Grant current user fake permissions.
+     *
+     * @param string $module
+     * @param string $permission
+     *
+     * @return void
+     */
+    protected function fakeUserPermission($module, $permission = ''): void
+    {
+        $this->app['session']->put('modules', [
+            $module => [
+                $permission,
+            ]
+        ]);
+    }
 }

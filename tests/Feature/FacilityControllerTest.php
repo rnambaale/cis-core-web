@@ -64,11 +64,59 @@ class FacilityControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('facilities.index'));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('facilities.index'));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('facilities.index');
+    }
 
-        // $response->assertViewHas('facilities', ((object) $fakeApiResponseBody)->facilities);
+    public function test_can_show_facilities_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            "draw" => 1,
+            "recordsTotal" => 1,
+            "recordsFiltered" => 1,
+            "data" => [
+                [
+                    "id" => "fca59526-912d-4a82-b775-d4ec7d9b33c1",
+                    "name" => "Ismael Johnson",
+                    "email" => "lysanne76@example.net",
+                    "website" => "example.net",
+                    "deleted_at" => null,
+                ]
+            ]
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('facilities.dt.show'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('facilities.dt.show'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('facilities.index-dt');
     }
 
     public function test_can_show_facility()
