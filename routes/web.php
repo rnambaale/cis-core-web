@@ -66,6 +66,8 @@ Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
     Route::get('/{role}/edit', 'RoleController@edit')->name('edit');
     Route::put('/{role}/restore', 'RoleController@restore')->name('restore');
     Route::put('/{role}/revoke', 'RoleController@revoke')->name('revoke');
+
+    Route::put('/{role}/permissions', 'RoleController@syncPermissions')->name('permissions');
 });
 
 Route::pattern('user', $uuid);

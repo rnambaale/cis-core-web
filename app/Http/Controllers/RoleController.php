@@ -120,7 +120,29 @@ class RoleController extends Controller
 
         $role = json_decode($apiResponse->getBody(), false);
 
-        return view('roles.show', ['role' => $role]);
+        $permissionsApiResponse = $this->passwordClient->get('permissions', [
+            'query' => [
+                'paginate' => false,
+            ],
+        ]);
+
+        $permissions = json_decode($permissionsApiResponse->getBody(), false)->permissions;
+
+        $rolePermissionsApiResponse = $this->passwordClient->get("roles/{$roleId}/permissions", [
+            'query' => [
+                'paginate' => false,
+            ],
+        ]);
+
+        $rolePermissions = json_decode($rolePermissionsApiResponse->getBody(), false)->permissions;
+
+        foreach ($permissions as $permission) {
+            $permission->checked = (in_array($permission->id, collect($rolePermissions)->pluck('id')->toArray()));
+        }
+
+        return view('roles.show', ['role' => $role, 'permissions' => collect($permissions)->groupBy('module_name')]);
+        // return collect($permissions)->groupBy('module_name');
+        // return $permissions;
     }
 
     /**
@@ -162,7 +184,8 @@ class RoleController extends Controller
 
         flash("{$role->name} created.")->success();
 
-        return view('roles.show', ['role' => $role]);
+        // return view('roles.show', ['role' => $role]);
+        return redirect(route('roles.show', $role->id));
     }
 
     /**
@@ -211,7 +234,8 @@ class RoleController extends Controller
 
         flash("{$role->name} updated.")->success();
 
-        return view('roles.show', ['role' => $role]);
+        //return view('roles.show', ['role' => $role]);
+        return redirect(route('roles.show', $roleId));
     }
 
     /**
@@ -235,7 +259,8 @@ class RoleController extends Controller
 
         flash("{$role->name} revoked.")->warning();
 
-        return view('roles.show', ['role' => $role]);
+        //return view('roles.show', ['role' => $role]);
+        return redirect(route('roles.show', $roleId));
     }
 
     /**
@@ -259,7 +284,8 @@ class RoleController extends Controller
 
         flash("{$role->name} restored.")->success();
 
-        return view('roles.show', ['role' => $role]);
+        //return view('roles.show', ['role' => $role]);
+        return redirect(route('roles.show', $roleId));
     }
 
     /**
@@ -282,5 +308,33 @@ class RoleController extends Controller
         flash('role deleted.')->error();
 
         return redirect()->route('roles.index');
+    }
+
+    /**
+     * Update role permissions.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $roleId
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
+     * @return \Illuminate\View\View
+     */
+    public function syncPermissions(Request $request, $roleId)
+    {
+        if (! auth_can('roles', 'update')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
+        $apiResponse = $this->passwordClient->put("roles/{$roleId}/permissions", [
+            'json' => $request->all(),
+        ]);
+
+        $role = json_decode($apiResponse->getBody(), false);
+
+        flash("{$role->name} permissions updated.")->success();
+
+        // return view('roles.show', ['role' => $role]);
+        return redirect(route('roles.show', $roleId));
     }
 }
