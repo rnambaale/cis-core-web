@@ -89,6 +89,12 @@
                                                 {{ $role->description }}
                                             </td>
                                             <td class="text-center">
+                                                @if(auth_can('permissions', 'assign-permissions'))
+                                                    <a href="{{ route('roles.permissions.show', $role->id) }}" class="text-success">
+                                                        <i class="fa fa-key" title="Permissions"></i>
+                                                    </a>
+                                                @endif
+
                                                 @if($role->deleted_at)
                                                     @if(auth_can('roles', 'restore'))
                                                         <a href="" class="text-success" data-toggle="modal"

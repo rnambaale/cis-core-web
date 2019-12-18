@@ -88,7 +88,6 @@ class ModuleController extends Controller
     public function datatables(Request $request)
     {
         if (! auth_can('modules', 'view-any')) {
-            // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
 

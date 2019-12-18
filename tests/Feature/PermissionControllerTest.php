@@ -57,15 +57,68 @@ class PermissionControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('permissions.index'));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('permissions.index'));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('permissions.index');
     }
 
-    public function test_can_show_permission()
+    public function test_can_show_permissions_via_datatables()
     {
         $fakeApiResponseBody = [
-            'id' => 1,
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => 1,
+                    'module_name' => 'users',
+                    'name' => 'view-any',
+                    'description' => 'View any user',
+                    'created_at' => '2018-09-30 09:42:23',
+                    'updated_at' => '2018-10-02 14:27:09',
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('permissions.dt.show'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('permissions.dt.show'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('permissions.index-dt');
+    }
+
+    public function test_can_show_permission()
+    {
+        $permissionId = 1;
+
+        $fakeApiResponseBody = [
+            'id' => $permissionId,
             'module_name' => 'users',
             'name' => 'view-any',
             'description' => 'View any user',
@@ -83,7 +136,15 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->get(route('permissions.show', 1));
+        $response = $this->actingAs($user)->get(route('permissions.show', $permissionId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'view');
+
+        $response = $this->actingAs($user)->get(route('permissions.show', $permissionId));
 
         $response->assertStatus(200);
 
@@ -94,7 +155,17 @@ class PermissionControllerTest extends TestCase
 
     public function test_can_show_create_permission()
     {
+        // ...
+
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('permissions.create'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'create');
 
         $response = $this->actingAs($user)->get(route('permissions.create'));
 
@@ -124,6 +195,14 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->post(route('permissions.store'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'create');
+
         $response = $this->actingAs($user)->from(route('permissions.create'))->post(route('permissions.store'), [
             'module_name' => 'users',
             'name' => 'view-any',
@@ -139,8 +218,10 @@ class PermissionControllerTest extends TestCase
 
     public function test_can_show_edit_permission()
     {
+        $permissionId = 1;
+
         $fakeApiResponseBody = [
-            'id' => 1,
+            'id' => $permissionId,
             'module_name' => 'users',
             'name' => 'view-any',
             'description' => 'View any user',
@@ -158,7 +239,15 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->get(route('permissions.edit', 1));
+        $response = $this->actingAs($user)->get(route('permissions.edit', $permissionId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'update');
+
+        $response = $this->actingAs($user)->get(route('permissions.edit', $permissionId));
 
         $response->assertStatus(200);
 
@@ -169,8 +258,10 @@ class PermissionControllerTest extends TestCase
 
     public function test_can_edit_permission()
     {
+        $permissionId = 1;
+
         $fakeApiResponseBody = [
-            'id' => 1,
+            'id' => $permissionId,
             'module_name' => 'users',
             'name' => 'view-any',
             'description' => 'View any user',
@@ -188,9 +279,17 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->get(route('permissions.update', $permissionId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'view-any');
+
         $response = $this->actingAs($user)
-            ->from(route('permissions.edit', 1))
-            ->put(route('permissions.update', 1), [
+            ->from(route('permissions.edit', $permissionId))
+            ->put(route('permissions.update', $permissionId), [
                 'module_name' => 'users',
                 'name' => 'view-any',
                 'description' => 'View any user',
@@ -205,6 +304,8 @@ class PermissionControllerTest extends TestCase
 
     public function test_can_delete_permission()
     {
+        $permissionId = 1;
+
         $fakeResponse = new Response(204, [], null);
 
         $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
@@ -215,9 +316,17 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->delete(route('permissions.destroy', $permissionId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'delete');
+
         $response = $this->actingAs($user)
-            ->from(route('permissions.show', 1))
-            ->delete(route('permissions.destroy', 1));
+            ->from(route('permissions.show', $permissionId))
+            ->delete(route('permissions.destroy', $permissionId));
 
         $response->assertRedirect(route('permissions.index'));
     }

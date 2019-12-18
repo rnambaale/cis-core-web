@@ -59,7 +59,7 @@ class PermissionController extends Controller
     }
 
     /**
-     * Show perimssions via datatables.
+     * Show permissions via datatables.
      *
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
@@ -67,11 +67,11 @@ class PermissionController extends Controller
      */
     public function showDatatables()
     {
-        if (! auth_can('perimssions', 'view-any')) {
+        if (! auth_can('permissions', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        return view('perimssions.index-dt');
+        return view('permissions.index-dt');
     }
 
     /**

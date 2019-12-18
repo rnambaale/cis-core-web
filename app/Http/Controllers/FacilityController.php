@@ -88,7 +88,6 @@ class FacilityController extends Controller
     public function datatables(Request $request)
     {
         if (! auth_can('facilities', 'view-any')) {
-            // return response()->json(['error' => 'Unauthorized access.'], 403);
             throw new AuthorizationException('Unauthorized access', 403);
         }
 

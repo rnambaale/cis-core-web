@@ -57,9 +57,60 @@ class ModuleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('modules.index'));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('modules.index'));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('modules.index');
+    }
+
+    public function test_can_show_modules_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'name' => 'users',
+                    'description' => 'Users module.',
+                    'category'      => 'uncategorized',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('modules.dt.show'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('modules.dt.show'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('modules.index-dt');
     }
 
     public function test_can_show_module()
@@ -87,6 +138,14 @@ class ModuleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('modules.show', $moduleName));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'view');
+
+        $response = $this->actingAs($user)->get(route('modules.show', $moduleName));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('modules.show');
@@ -96,7 +155,17 @@ class ModuleControllerTest extends TestCase
 
     public function test_can_show_create_module()
     {
+        // ...
+
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('modules.create'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'create');
 
         $response = $this->actingAs($user)->get(route('modules.create'));
 
@@ -125,6 +194,14 @@ class ModuleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post(route('modules.store'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'create');
 
         $response = $this->actingAs($user)->from(route('modules.create'))->post(route('modules.store'), [
             'name' => 'users',
@@ -163,6 +240,14 @@ class ModuleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('modules.edit', $moduleName));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'update');
+
+        $response = $this->actingAs($user)->get(route('modules.edit', $moduleName));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('modules.edit');
@@ -192,6 +277,14 @@ class ModuleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('modules.update', $moduleName));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'update');
 
         $response = $this->actingAs($user)
             ->from(route('modules.edit', $moduleName))
@@ -229,6 +322,14 @@ class ModuleControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('modules.revoke', $moduleName));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'soft-delete');
+
         $response = $this->actingAs($user)
             ->from(route('modules.show', $moduleName))
             ->put(route('modules.revoke', $moduleName));
@@ -263,6 +364,14 @@ class ModuleControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('modules.restore', $moduleName));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'restore');
+
         $response = $this->actingAs($user)
             ->from(route('modules.show', $moduleName))
             ->put(route('modules.restore', $moduleName));
@@ -287,6 +396,14 @@ class ModuleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('modules.destroy', $moduleName));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'force-delete');
 
         $response = $this->actingAs($user)
             ->from(route('modules.show', $moduleName))

@@ -148,6 +148,14 @@ class FacilityControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('facilities.show', $facilityId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'view');
+
+        $response = $this->actingAs($user)->get(route('facilities.show', $facilityId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('facilities.show');
@@ -158,6 +166,12 @@ class FacilityControllerTest extends TestCase
     public function test_can_show_create_facility()
     {
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('facilities.create'));
+
+        $response->assertStatus(403);
+
+        $this->fakeUserPermission('facilities', 'create');
 
         $response = $this->actingAs($user)->get(route('facilities.create'));
 
@@ -190,6 +204,14 @@ class FacilityControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post(route('facilities.store'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'create');
 
         $response = $this->actingAs($user)->from(route('facilities.create'))->post(route('facilities.store'), [
             'name' => 'Mulago Hospital',
@@ -236,6 +258,14 @@ class FacilityControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('facilities.edit', $facilityId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'update');
+
+        $response = $this->actingAs($user)->get(route('facilities.edit', $facilityId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('facilities.edit');
@@ -269,6 +299,14 @@ class FacilityControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('facilities.update', $facilityId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'update');
 
         $response = $this->actingAs($user)
             ->from(route('facilities.edit', $facilityId))
@@ -315,6 +353,14 @@ class FacilityControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('facilities.revoke', $facilityId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'soft-delete');
+
         $response = $this->actingAs($user)
             ->from(route('facilities.show', $facilityId))
             ->put(route('facilities.revoke', $facilityId));
@@ -353,6 +399,14 @@ class FacilityControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('facilities.restore', $facilityId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'restore');
+
         $response = $this->actingAs($user)
             ->from(route('facilities.show', $facilityId))
             ->put(route('facilities.restore', $facilityId));
@@ -377,6 +431,14 @@ class FacilityControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('facilities.destroy', $facilityId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('facilities', 'force-delete');
 
         $response = $this->actingAs($user)
             ->from(route('facilities.show', $facilityId))

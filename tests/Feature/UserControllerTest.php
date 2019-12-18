@@ -61,9 +61,64 @@ class UserControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('users.index'));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('users.index'));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('users.index');
+    }
+
+    public function test_can_show_users_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'role_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'John Doe',
+                    'alias' => 'Jdoe',
+                    'email' => 'Jdoe@example.com',
+                    'email_verified_at' => '2018-09-30 17:06:12',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('users.dt.show'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('users.dt.show'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('users.index-dt');
     }
 
     public function test_can_show_user()
@@ -81,7 +136,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -90,7 +145,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -116,6 +171,14 @@ class UserControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('users.show', $userId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'view');
+
+        $response = $this->actingAs($user)->get(route('users.show', $userId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('users.show');
@@ -125,7 +188,17 @@ class UserControllerTest extends TestCase
 
     public function test_can_show_create_user()
     {
+        // ...
+
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('users.create'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'create');
 
         $response = $this->actingAs($user)->get(route('users.create'));
 
@@ -149,7 +222,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -158,7 +231,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -181,6 +254,14 @@ class UserControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post(route('users.store'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'create');
 
         $response = $this->actingAs($user)->from(route('users.create'))->post(route('users.store'), [
             'name' => 'John Doe',
@@ -211,7 +292,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -220,7 +301,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -246,6 +327,14 @@ class UserControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('users.edit', $userId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'update');
+
+        $response = $this->actingAs($user)->get(route('users.edit', $userId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('users.edit');
@@ -268,7 +357,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -277,7 +366,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -300,6 +389,14 @@ class UserControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('users.update', $userId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'update');
 
         $response = $this->actingAs($user)
             ->from(route('users.edit', $userId))
@@ -329,7 +426,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at'    => '2019-10-16 09:02:58',
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -338,7 +435,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -361,6 +458,14 @@ class UserControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('users.revoke', $userId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'soft-delete');
 
         $response = $this->actingAs($user)
             ->from(route('users.show', $userId))
@@ -388,7 +493,7 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => [
+            'role' => (object) [
                 'id' => $roleId,
                 'facility_id' => $userId,
                 'name' => 'Sys Admin',
@@ -397,7 +502,7 @@ class UserControllerTest extends TestCase
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => [
+            'facility' => (object) [
                 'id' => $facilityId,
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
@@ -420,6 +525,14 @@ class UserControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('users.restore', $userId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'restore');
 
         $response = $this->actingAs($user)
             ->from(route('users.show', $userId))
@@ -445,6 +558,14 @@ class UserControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->delete(route('users.destroy', $userId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'force-delete');
 
         $response = $this->actingAs($user)
             ->from(route('users.show', $userId))

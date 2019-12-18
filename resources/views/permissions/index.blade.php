@@ -91,8 +91,6 @@
     </div>
 </div>
 
-{{-- @include('permissions.modals.revoke')
-@include('permissions.modals.restore') --}}
 @include('permissions.modals.destroy')
 
 @endsection

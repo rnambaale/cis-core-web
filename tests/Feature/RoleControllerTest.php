@@ -58,9 +58,61 @@ class RoleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('roles.index'));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('roles.index'));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('roles.index');
+    }
+
+    public function test_can_show_roles_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'Developer',
+                    'description' => 'Role Description',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('roles.dt.show'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('roles.dt.show'));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('roles.index-dt');
     }
 
     public function test_can_show_role()
@@ -90,6 +142,14 @@ class RoleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('roles.show', $roleId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'view');
+
+        $response = $this->actingAs($user)->get(route('roles.show', $roleId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('roles.show');
@@ -99,7 +159,17 @@ class RoleControllerTest extends TestCase
 
     public function test_can_show_create_role()
     {
+        // ...
+
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('roles.create'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'create');
 
         $response = $this->actingAs($user)->get(route('roles.create'));
 
@@ -129,6 +199,14 @@ class RoleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->post(route('roles.store'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'create');
 
         $response = $this->actingAs($user)->from(route('roles.create'))->post(route('roles.store'), [
             'name' => 'Manager Role',
@@ -168,6 +246,14 @@ class RoleControllerTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('roles.edit', $roleId));
 
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'update');
+
+        $response = $this->actingAs($user)->get(route('roles.edit', $roleId));
+
         $response->assertStatus(200);
 
         $response->assertViewIs('roles.edit');
@@ -198,6 +284,14 @@ class RoleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('roles.update', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'update');
 
         $response = $this->actingAs($user)
             ->from(route('roles.edit', $roleId))
@@ -237,6 +331,14 @@ class RoleControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('roles.revoke', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'soft-delete');
+
         $response = $this->actingAs($user)
             ->from(route('roles.show', $roleId))
             ->put(route('roles.revoke', $roleId));
@@ -272,6 +374,14 @@ class RoleControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
+        $response = $this->actingAs($user)->put(route('roles.restore', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'restore');
+
         $response = $this->actingAs($user)
             ->from(route('roles.show', $roleId))
             ->put(route('roles.restore', $roleId));
@@ -296,6 +406,14 @@ class RoleControllerTest extends TestCase
         // ...
 
         $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->delete(route('roles.destroy', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'force-delete');
 
         $response = $this->actingAs($user)
             ->from(route('roles.show', $roleId))

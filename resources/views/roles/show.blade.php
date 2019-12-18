@@ -154,54 +154,7 @@
             </div>
 
             <div class="col-md-4">
-                @if(auth_can('permissions', 'assign-permissions'))
-                    <form role="form" method="POST" action="{{ route('roles.permissions', $role->id) }}">
-                        @csrf
-                        @method('PUT')
-                        <div id="accordion-1" class="accordion panel-group" role="tablist" aria-multiselectable="true">
-                            @foreach ($permissions as $key => $module_permissions)                       
-                            <div class="col-md-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingOne">
-                                        <h4 class="panel-title">
-                                            <a data-toggle="collapse" data-parent="#accordion-1" href="#collapse-{{ $key }}">
-                                                <span>{{ $key }}</span>
-                                                <i class="icon ti-arrow-circle-down"></i> 
-                                            </a>
-                                        </h4>
-                                    </div>
-
-                                    <div id="collapse-{{ $key }}" class="collapse panel-collapse">
-                                        <div class="panel-body">
-                                            @foreach ($module_permissions as $permission)
-                                            <div class="">
-                                                <div class="checkbox">
-                                                    <input
-                                                        id="{{ $permission->id }}"
-                                                        name="permissions[]" type="checkbox" value="{{ $permission->id }}"
-                                                        {{ $permission->checked ? 'checked' : '' }}
-                                                        >
-                                                    <label class="" for="{{ $permission->id }}">
-                                                        {{ $permission->name }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                        <div class="col-md-12">
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-sm">
-                                <i class="fa fa-save"></i>&nbsp;Save Permissions
-                            </button>
-                        </div>
-                    </form>
-                @endif
+                
             </div>
         </div>        
     </div>
