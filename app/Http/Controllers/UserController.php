@@ -192,6 +192,8 @@ class UserController extends Controller
 
         $user = json_decode($apiResponse->getBody(), false);
 
+        // ...
+
         $rolesApiResponse = $this->passwordClient->get('roles', [
             'query' => [
                 'paginate' => false,
@@ -200,7 +202,10 @@ class UserController extends Controller
 
         $roles = json_decode($rolesApiResponse->getBody(), false)->roles;
 
-        return view('users.edit', ['user' => $user, 'roles' => $roles]);
+        return view('users.edit', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**

@@ -188,6 +188,26 @@ class UserControllerTest extends TestCase
 
     public function test_can_show_create_user()
     {
+        $fakeApiResponseBody = [
+            'roles' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'Developer',
+                    'description' => 'Role Description',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
         // ...
 
         $user = factory(User::class)->create();
@@ -279,12 +299,12 @@ class UserControllerTest extends TestCase
 
     public function test_can_show_edit_user()
     {
-        $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
+        $response = [];
 
-        $fakeApiResponseBody = [
-            'id' => $userId,
-            'facility_id' => $facilityId,
-            'role_id' => $roleId,
+        $fakeApiUserResponseBody = [
+            'id' => 'e3258a03-e9f7-4f0a-a5fe-c3f57f51baf1',
+            'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+            'role_id' => '6600fb62-7933-4884-8268-bfdd3cb4a42c',
             'alias' => 'jdoe',
             'name' => 'John Doe',
             'email' => 'jdoe@example.com',
@@ -292,17 +312,17 @@ class UserControllerTest extends TestCase
             'created_at' => '2018-09-30 09:42:23',
             'updated_at' => '2018-10-02 14:27:09',
             'deleted_at' => null,
-            'role' => (object) [
-                'id' => $roleId,
-                'facility_id' => $userId,
+            'role' => [
+                'id' => '6600fb62-7933-4884-8268-bfdd3cb4a42c',
+                'facility_id' => 'e3258a03-e9f7-4f0a-a5fe-c3f57f51baf1',
                 'name' => 'Sys Admin',
                 'description' => 'System Administrator',
                 'created_at' => '2018-09-30 09:42:23',
                 'updated_at' => '2018-10-02 14:27:09',
                 'deleted_at' => null,
             ],
-            'facility' => (object) [
-                'id' => $facilityId,
+            'facility' => [
+                'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
                 'name' => 'Mulago Hospital',
                 'description' => 'Mulago Hospital',
                 'address' => 'Mulago Hill',
@@ -315,9 +335,29 @@ class UserControllerTest extends TestCase
             ],
         ];
 
-        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+        $fakeUserResponse = new Response(200, [], json_encode($fakeApiUserResponseBody));
 
-        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+        $responses[] = $fakeUserResponse;
+
+        $fakeApiRolesResponseBody = [
+            'roles' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'Developer',
+                    'description' => 'Role Description',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeRolesResponse = new Response(200, [], json_encode($fakeApiRolesResponseBody));
+
+        $responses[] = $fakeRolesResponse;
+
+        $fakePasswordClient = $this->mockPasswordClient($responses);
 
         $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
 
@@ -325,7 +365,7 @@ class UserControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->get(route('users.edit', $userId));
+        $response = $this->actingAs($user)->get(route('users.edit', $user->id));
 
         $response->assertStatus(403);
 
@@ -333,13 +373,15 @@ class UserControllerTest extends TestCase
 
         $this->fakeUserPermission('users', 'update');
 
-        $response = $this->actingAs($user)->get(route('users.edit', $userId));
+        $response = $this->actingAs($user)->get(route('users.edit', $user->id));
 
         $response->assertStatus(200);
 
         $response->assertViewIs('users.edit');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiUserResponseBody));
+
+        $response->assertViewHas('roles', objectify($fakeApiRolesResponseBody)->roles);
     }
 
     public function test_can_edit_user()

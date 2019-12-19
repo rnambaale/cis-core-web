@@ -93,3 +93,17 @@ if (! function_exists('paginate')) {
         );
     }
 }
+
+if (! function_exists('objectify')) {
+    /**
+     * Convert array to object - recursive.
+     *
+     * @param array $arr
+     *
+     * @return object
+     */
+    function objectify(array $arr): object
+    {
+        return json_decode(json_encode($arr), false);
+    }
+}
