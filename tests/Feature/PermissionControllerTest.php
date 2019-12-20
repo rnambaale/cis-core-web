@@ -155,6 +155,25 @@ class PermissionControllerTest extends TestCase
 
     public function test_can_show_create_permission()
     {
+        $fakeApiResponseBody = [
+            'modules' => [
+                [
+                    'name' => 'users',
+                    'description' => 'Users module.',
+                    'category'      => 'uncategorized',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
         // ...
 
         $user = factory(User::class)->create();
@@ -220,7 +239,7 @@ class PermissionControllerTest extends TestCase
     {
         $permissionId = 1;
 
-        $fakeApiResponseBody = [
+        $fakeApiPermissionResponseBody = [
             'id' => $permissionId,
             'module_name' => 'users',
             'name' => 'view-any',
@@ -229,9 +248,28 @@ class PermissionControllerTest extends TestCase
             'updated_at' => '2018-10-02 14:27:09',
         ];
 
-        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+        $fakePermissionResponse = new Response(200, [], json_encode($fakeApiPermissionResponseBody));
 
-        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+        $responses[] = $fakePermissionResponse;
+
+        $fakeApiModulesResponseBody = [
+            'modules' => [
+                [
+                    'name' => 'users',
+                    'description' => 'Users module.',
+                    'category'      => 'uncategorized',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeModulesResponse = new Response(200, [], json_encode($fakeApiModulesResponseBody));
+
+        $responses[] = $fakeModulesResponse;
+
+        $fakePasswordClient = $this->mockPasswordClient($responses);
 
         $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
 
@@ -253,7 +291,9 @@ class PermissionControllerTest extends TestCase
 
         $response->assertViewIs('permissions.edit');
 
-        $response->assertViewHas('permission', (object) $fakeApiResponseBody);
+        $response->assertViewHas('permission', objectify($fakeApiPermissionResponseBody));
+
+        $response->assertViewHas('modules', objectify($fakeApiModulesResponseBody)->modules);
     }
 
     public function test_can_edit_permission()
@@ -285,7 +325,7 @@ class PermissionControllerTest extends TestCase
 
         // ...
 
-        $this->fakeUserPermission('permissions', 'view-any');
+        $this->fakeUserPermission('permissions', 'update');
 
         $response = $this->actingAs($user)
             ->from(route('permissions.edit', $permissionId))
