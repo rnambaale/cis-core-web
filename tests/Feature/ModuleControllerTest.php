@@ -150,7 +150,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.show');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_create_module()
@@ -212,7 +212,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.show');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_edit_module()
@@ -252,7 +252,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.edit');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_edit_module()
@@ -296,7 +296,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.show');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_revoke_module()
@@ -338,7 +338,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.show');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_restore_module()
@@ -380,7 +380,7 @@ class ModuleControllerTest extends TestCase
 
         $response->assertViewIs('modules.show');
 
-        $response->assertViewHas('module', (object) $fakeApiResponseBody);
+        $response->assertViewHas('module', objectify($fakeApiResponseBody));
     }
 
     public function test_can_delete_module()

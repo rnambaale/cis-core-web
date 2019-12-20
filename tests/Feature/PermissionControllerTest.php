@@ -150,7 +150,7 @@ class PermissionControllerTest extends TestCase
 
         $response->assertViewIs('permissions.show');
 
-        $response->assertViewHas('permission', (object) $fakeApiResponseBody);
+        $response->assertViewHas('permission', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_create_permission()
@@ -232,7 +232,7 @@ class PermissionControllerTest extends TestCase
 
         $response->assertViewIs('permissions.show');
 
-        $response->assertViewHas('permission', (object) $fakeApiResponseBody);
+        $response->assertViewHas('permission', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_edit_permission()
@@ -339,7 +339,7 @@ class PermissionControllerTest extends TestCase
 
         $response->assertViewIs('permissions.show');
 
-        $response->assertViewHas('permission', (object) $fakeApiResponseBody);
+        $response->assertViewHas('permission', objectify($fakeApiResponseBody));
     }
 
     public function test_can_delete_permission()

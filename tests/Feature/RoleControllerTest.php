@@ -154,7 +154,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_create_role()
@@ -217,7 +217,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_edit_role()
@@ -258,7 +258,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.edit');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_edit_role()
@@ -304,7 +304,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_revoke_role()
@@ -347,7 +347,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_restore_role()
@@ -390,7 +390,7 @@ class RoleControllerTest extends TestCase
 
         $response->assertViewIs('roles.show');
 
-        $response->assertViewHas('role', (object) $fakeApiResponseBody);
+        $response->assertViewHas('role', objectify($fakeApiResponseBody));
     }
 
     public function test_can_delete_role()

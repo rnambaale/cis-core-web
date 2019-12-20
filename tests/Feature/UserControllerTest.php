@@ -183,7 +183,7 @@ class UserControllerTest extends TestCase
 
         $response->assertViewIs('users.show');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_create_user()
@@ -294,7 +294,7 @@ class UserControllerTest extends TestCase
 
         $response->assertViewIs('users.show');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_edit_user()
@@ -450,7 +450,7 @@ class UserControllerTest extends TestCase
 
         $response->assertViewIs('users.show');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiResponseBody));
     }
 
     public function test_can_revoke_user()
@@ -517,7 +517,7 @@ class UserControllerTest extends TestCase
 
         $response->assertViewIs('users.show');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiResponseBody));
     }
 
     public function test_can_restore_user()
@@ -584,7 +584,7 @@ class UserControllerTest extends TestCase
 
         $response->assertViewIs('users.show');
 
-        $response->assertViewHas('user', (object) $fakeApiResponseBody);
+        $response->assertViewHas('user', objectify($fakeApiResponseBody));
     }
 
     public function test_can_delete_user()

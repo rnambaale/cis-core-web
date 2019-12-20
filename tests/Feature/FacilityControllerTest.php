@@ -160,7 +160,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_create_facility()
@@ -226,7 +226,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_show_edit_facility()
@@ -270,7 +270,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.edit');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_edit_facility()
@@ -323,7 +323,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_revoke_facility()
@@ -369,7 +369,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_restore_facility()
@@ -415,7 +415,7 @@ class FacilityControllerTest extends TestCase
 
         $response->assertViewIs('facilities.show');
 
-        $response->assertViewHas('facility', (object) $fakeApiResponseBody);
+        $response->assertViewHas('facility', objectify($fakeApiResponseBody));
     }
 
     public function test_can_delete_facility()
