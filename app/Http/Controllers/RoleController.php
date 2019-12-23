@@ -301,7 +301,7 @@ class RoleController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $permissionsApiResponse = $this->passwordClient->get('permissions', [
+        $permissionsApiResponse = $this->passwordClient->get("roles/{$roleId}/permissions/granted", [
             'query' => [
                 'paginate' => false,
             ],
@@ -309,23 +309,11 @@ class RoleController extends Controller
 
         $permissions = json_decode($permissionsApiResponse->getBody(), false)->permissions;
 
-        $rolePermissionsApiResponse = $this->passwordClient->get("roles/{$roleId}/permissions", [
-            'query' => [
-                'paginate' => false,
-            ],
-        ]);
-
-        $rolePermissions = json_decode($rolePermissionsApiResponse->getBody(), false)->permissions;
-
-        foreach ($permissions as $permission) {
-            $permission->checked = (in_array($permission->id, collect($rolePermissions)->pluck('id')->toArray()));
-        }
-
         $apiResponse = $this->passwordClient->get("roles/{$roleId}");
 
         $role = json_decode($apiResponse->getBody(), false);
 
-        return view('roles.permissions', ['role' => $role, 'permissions' => collect($permissions)->groupBy('module_name')]);
+        return view('roles.permissions', ['role' => $role, 'permissions' => collect($permissions)->groupBy('module.name')]);
     }
 
     /**

@@ -111,7 +111,7 @@
                                                     <input
                                                         id="{{ $permission->id }}"
                                                         name="permissions[]" type="checkbox" value="{{ $permission->id }}"
-                                                        {{ $permission->checked ? 'checked' : '' }}
+                                                        {{ ($permission->granted === true) ? 'checked' : '' }}
                                                         >
                                                     <label class="" for="{{ $permission->id }}">
                                                         {{ $permission->name }}
