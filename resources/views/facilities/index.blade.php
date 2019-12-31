@@ -97,11 +97,6 @@
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                @if(auth_can('facilities', 'update'))
-                                                    <a href="{{ route('facilities.edit', $facility->id) }}" class="text-info">
-                                                        <i class="fa fa-pencil px-1" title="Edit"></i>
-                                                    </a>
-                                                @endif
                                                 @if($facility->deleted_at)
                                                     @if(auth_can('facilities', 'restore'))
                                                         <a href="" class="text-success" data-toggle="modal"
@@ -118,6 +113,16 @@
                                                         </a>
                                                     @endif
                                                 @else
+                                                    @if(auth_can('facilities', 'update'))
+                                                        <a href="{{ route('facilities.edit', $facility->id) }}" class="text-info">
+                                                            <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                        </a>
+                                                    @endif
+                                                    @if(auth_can('modules', 'assign-modules'))
+                                                        <a href="{{ route('facilities.modules.show', $facility->id) }}" class="text-success">
+                                                            <i class="fa fa-key" title="Modules"></i>
+                                                        </a>
+                                                    @endif
                                                     @if(auth_can('facilities', 'soft-delete'))
                                                         <a href="" class="text-warning" data-toggle="modal"
                                                             data-id="{{ $facility->id }}" data-name="{{ $facility->name }}"

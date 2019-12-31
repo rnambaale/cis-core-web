@@ -5,9 +5,26 @@
     <div class="container-fluid">
 
         <div class="page-title">
-            <h4>
-                <a href="{{ route('roles.index') }}">Roles</a>
-            </h4>
+            <h4>Roles</h4>
+        </div>
+
+        <div class="row mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('roles.index') }}">Roles</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('roles.show', $role->id) }}">{{ $role->name }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Edit
+                    </li>
+                </ol>
+            </nav>
         </div>
 
         <div class="row">
@@ -47,12 +64,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div class="card">
-                        
-                    </div>
-                    
                 </div>
             </div>
         </form>

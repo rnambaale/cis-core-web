@@ -57,6 +57,19 @@
             </a>
         </div>
 
+        <div class="row mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Roles
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 @include('flash::message')
@@ -89,12 +102,6 @@
                                                 {{ $role->description }}
                                             </td>
                                             <td class="text-center">
-                                                @if(auth_can('permissions', 'assign-permissions'))
-                                                    <a href="{{ route('roles.permissions.show', $role->id) }}" class="text-success">
-                                                        <i class="fa fa-key" title="Permissions"></i>
-                                                    </a>
-                                                @endif
-
                                                 @if($role->deleted_at)
                                                     @if(auth_can('roles', 'restore'))
                                                         <a href="" class="text-success" data-toggle="modal"
@@ -114,6 +121,12 @@
                                                     @if(auth_can('roles', 'update'))
                                                         <a href="{{ route('roles.edit', $role->id) }}" class="text-info">
                                                             <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if(auth_can('permissions', 'assign-permissions'))
+                                                        <a href="{{ route('roles.permissions.show', $role->id) }}" class="text-success">
+                                                            <i class="fa fa-key" title="Permissions"></i>
                                                         </a>
                                                     @endif
 

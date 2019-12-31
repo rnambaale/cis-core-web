@@ -50,9 +50,23 @@
     <div class="container-fluid">
 
         <div class="page-title">
-            <h4>
-                <a href="{{ route('roles.index') }}">Roles</a>
-            </h4>
+            <h4>Role</h4>
+        </div>
+
+        <div class="row mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('roles.index') }}">Roles</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ $role->name }}
+                    </li>
+                </ol>
+            </nav>
         </div>
 
         <div class="row">
@@ -81,12 +95,6 @@
                                 {{ $role->description }}
                             </p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="card">
-                    <div class="card-block pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Created At
@@ -117,14 +125,14 @@
                     <div class="card-block pb-0">
                         <div class="row">
                             @if($role->deleted_at)
-                                <p class="col">
+                                <p class="col-6">
                                     <a href="" data-toggle="modal" data-target="#restore-role-modal"
                                     data-id="{{ $role->id }}" data-name="{{ $role->name }}"
                                         class="btn btn-success btn-sm btn-block">
                                         <i class="fa fa-refresh"></i>&nbsp;Restore
                                     </a>
                                 </p>
-                                <p class="col">
+                                <p class="col-6">
                                     <a href="" data-toggle="modal" data-target="#destroy-role-modal"
                                     data-id="{{ $role->id }}" data-name="{{ $role->name }}"
                                         class="btn btn-danger btn-sm btn-block">
@@ -133,14 +141,14 @@
                                 </p>
                             @else
                                 @if(auth_can('roles', 'update'))
-                                <p class="col">
+                                <p class="col-6">
                                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info btn-sm btn-block">
                                         <i class="fa fa-pencil"></i>&nbsp;Edit
                                     </a>
                                 </p>
                                 @endif
 
-                                <p class="col">
+                                <p class="col-6">
                                     <a href="" data-toggle="modal" data-target="#revoke-role-modal"
                                     data-id="{{ $role->id }}" data-name="{{ $role->name }}"
                                         class="btn btn-warning btn-sm btn-block">
@@ -148,15 +156,19 @@
                                     </a>
                                 </p>
                             @endif
+                            @if(auth_can('permissions', 'assign-permissions'))
+                                <p class="col-6">
+                                    <a href="{{ route('roles.permissions.show', $role->id) }}"
+                                        class="btn btn-default btn-sm btn-block">
+                                        <i class="fa fa-key"></i>&nbsp;Permissions
+                                    </a>
+                                </p>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                
-            </div>
-        </div>        
+        </div>
     </div>
 </div>
 

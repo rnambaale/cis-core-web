@@ -282,4 +282,55 @@ class FacilityController extends Controller
 
         return redirect()->route('facilities.index');
     }
+
+    /**
+     * Show facility modules.
+     *
+     * @param string $facilityId
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showModules($facilityId)
+    {
+        if (! auth_can('modules', 'assign-modules')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
+        $apiResponse = $this->passwordClient->get("facilities/{$facilityId}/modules/granted");
+
+        $facility = json_decode($apiResponse->getBody(), false);
+
+        $facility->modules = collect($facility->modules)->groupBy('category');
+
+        return view('facilities.modules', ['facility' => $facility]);
+    }
+
+    /**
+     * Update facility modules.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $facilityId
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
+     * @return \Illuminate\View\View
+     */
+    public function syncModules(Request $request, $facilityId)
+    {
+        if (! auth_can('modules', 'assign-modules')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
+        $apiResponse = $this->passwordClient->put("facilities/{$facilityId}/modules", [
+            'json' => $request->all(),
+        ]);
+
+        $facility = json_decode($apiResponse->getBody(), false);
+
+        flash("{$facility->name} modules updated.")->success();
+
+        return redirect(route('facilities.modules.show', $facilityId));
+    }
 }

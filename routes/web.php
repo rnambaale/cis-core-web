@@ -48,6 +48,8 @@ Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
     Route::put('/{facility}', 'FacilityController@update')->name('update');
     Route::get('/{facility}', 'FacilityController@show')->name('show');
     Route::get('/{facility}/edit', 'FacilityController@edit')->name('edit');
+    Route::get('/{facility}/modules', 'FacilityController@showModules')->name('modules.show');
+    Route::put('/{facility}/modules', 'FacilityController@syncModules')->name('modules.update');
     Route::put('/{facility}/restore', 'FacilityController@restore')->name('restore');
     Route::put('/{facility}/revoke', 'FacilityController@revoke')->name('revoke');
 });
@@ -64,11 +66,10 @@ Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
     Route::put('/{role}', 'RoleController@update')->name('update');
     Route::get('/{role}', 'RoleController@show')->name('show');
     Route::get('/{role}/edit', 'RoleController@edit')->name('edit');
+    Route::get('/{role}/permissions', 'RoleController@showPermissions')->name('permissions.show');
+    Route::put('/{role}/permissions', 'RoleController@syncPermissions')->name('permissions.update');
     Route::put('/{role}/restore', 'RoleController@restore')->name('restore');
     Route::put('/{role}/revoke', 'RoleController@revoke')->name('revoke');
-
-    Route::get('/{role}/permissions', 'RoleController@getPermissions')->name('permissions.show');
-    Route::put('/{role}/permissions', 'RoleController@syncPermissions')->name('permissions.update');
 });
 
 Route::pattern('user', $uuid);

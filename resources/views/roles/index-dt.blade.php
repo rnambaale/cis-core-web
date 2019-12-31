@@ -7,6 +7,7 @@
         var can_restore = {{ auth_can('roles', 'restore') ? 1 : 0 }};
         var can_soft_delete = {{ auth_can('roles', 'soft-delete') ? 1 : 0 }};
         var can_force_delete = {{ auth_can('roles', 'force-delete') ? 1 : 0 }};
+        var can_assign_permissions = {{ auth_can('permissions', 'assign-permissions') ? 1 : 0 }};
 
         $(document).ready(function () {
             var roles_dt = $('table[id=roles]').DataTable({
@@ -72,6 +73,8 @@
 
                             var edit = '<a href="'+route('roles.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
 
+                            var assignPermissions = '<a href="'+route('roles.permissions.update', row.id)+'" class="text-success"><i class="fa fa-pencil px-1" title="Permissions"></i></a>';
+
                             var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-facility-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 
                             var restore = '<a href="" class="text-success" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#restore-facility-modal"><i class="fa fa-refresh px-1" title="Restore"></i></a>';
@@ -82,10 +85,6 @@
 
                             var action = '';
 
-                            if(can_update) {
-                                action = edit;
-                            }
-
                             if(row.deleted_at) {
                                 if(can_restore) {
                                     action += restore;
@@ -95,6 +94,14 @@
                                     action += forceDelete;
                                 }
                             } else {
+                                if(can_update) {
+                                    action = edit;
+                                }
+
+                                if(can_assign_permissions) {
+                                    action += assignPermissions;
+                                }
+
                                 if(can_soft_delete) {
                                     action += softDelete;
                                 }
@@ -182,6 +189,19 @@
             <a href="{{ route('roles.create') }}" class="btn btn-sm btn-primary m-0">
                 <i class="fa fa-plus"></i>&nbsp;Register
             </a>
+        </div>
+
+        <div class="row mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Roles
+                    </li>
+                </ol>
+            </nav>
         </div>
 
         <div class="row">

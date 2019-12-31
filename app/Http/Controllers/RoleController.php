@@ -287,7 +287,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Show roles permissions.
+     * Show role permissions.
      *
      * @param string $roleId
      *
@@ -295,25 +295,21 @@ class RoleController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function getPermissions($roleId)
+    public function showPermissions($roleId)
     {
-        if (! auth_can('roles', 'view-permissions')) {
+        if (! auth_can('permissions', 'assign-permissions')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $permissionsApiResponse = $this->passwordClient->get("roles/{$roleId}/permissions/granted", [
-            'query' => [
-                'paginate' => false,
-            ],
-        ]);
-
-        $permissions = json_decode($permissionsApiResponse->getBody(), false)->permissions;
-
-        $apiResponse = $this->passwordClient->get("roles/{$roleId}");
+        $apiResponse = $this->passwordClient->get("roles/{$roleId}/permissions/granted");
 
         $role = json_decode($apiResponse->getBody(), false);
 
-        return view('roles.permissions', ['role' => $role, 'permissions' => collect($permissions)->groupBy('module.name')]);
+        $role->permissions = collect($role->permissions)->groupBy('module.name');
+
+        return view('roles.permissions', [
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -328,7 +324,7 @@ class RoleController extends Controller
      */
     public function syncPermissions(Request $request, $roleId)
     {
-        if (! auth_can('roles', 'update')) {
+        if (! auth_can('permissions', 'assign-permissions')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
@@ -340,7 +336,6 @@ class RoleController extends Controller
 
         flash("{$role->name} permissions updated.")->success();
 
-        // return view('roles.show', ['role' => $role]);
         return redirect(route('roles.permissions.show', $roleId));
     }
 }

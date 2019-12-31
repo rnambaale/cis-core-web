@@ -7,6 +7,7 @@
         var can_restore = {{ auth_can('facilities', 'restore') ? 1 : 0 }};
         var can_soft_delete = {{ auth_can('facilities', 'soft-delete') ? 1 : 0 }};
         var can_force_delete = {{ auth_can('facilities', 'force-delete') ? 1 : 0 }};
+        var can_assign_modules = {{ auth_can('modules', 'assign-modules') ? 1 : 0 }};
 
         $(document).ready(function () {
             var facilities_dt = $('table[id=facilities]').DataTable({
@@ -77,6 +78,8 @@
 
                             var edit = '<a href="'+route('facilities.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
 
+                            var assignModules = '<a href="'+route('facilities.modules.update', row.id)+'" class="text-success"><i class="fa fa-pencil px-1" title="Modules"></i></a>';
+
                             var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-facility-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 
                             var restore = '<a href="" class="text-success" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#restore-facility-modal"><i class="fa fa-refresh px-1" title="Restore"></i></a>';
@@ -87,10 +90,6 @@
 
                             var action = '';
 
-                            if(can_update) {
-                                action = edit;
-                            }
-
                             if(row.deleted_at) {
                                 if(can_restore) {
                                     action += restore;
@@ -100,6 +99,14 @@
                                     action += forceDelete;
                                 }
                             } else {
+                                if(can_update) {
+                                    action = edit;
+                                }
+
+                                if(can_assign_modules) {
+                                    action = assignModules;
+                                }
+
                                 if(can_soft_delete) {
                                     action += softDelete;
                                 }
