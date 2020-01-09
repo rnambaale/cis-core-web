@@ -6,7 +6,6 @@ use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
