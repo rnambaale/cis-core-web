@@ -53,7 +53,7 @@ class UserController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $users = paginate($request, $body->users);
+        $users = paginate($request, $body);
 
         return view('users.index', ['users' => $users]);
     }
@@ -92,7 +92,7 @@ class UserController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('users/dt', [
+        $apiResponse = $this->passwordClient->get('users/datatables', [
             'query' => $request->query(),
         ]);
 

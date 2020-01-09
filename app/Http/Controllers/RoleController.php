@@ -53,7 +53,7 @@ class RoleController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $roles = paginate($request, $body->roles);
+        $roles = paginate($request, $body);
 
         return view('roles.index', ['roles' => $roles]);
     }
@@ -91,7 +91,7 @@ class RoleController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('roles/dt', [
+        $apiResponse = $this->passwordClient->get('roles/datatables', [
             'query' => $request->query(),
         ]);
 

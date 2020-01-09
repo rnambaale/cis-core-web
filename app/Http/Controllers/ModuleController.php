@@ -53,7 +53,7 @@ class ModuleController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $modules = paginate($request, $body->modules);
+        $modules = paginate($request, $body);
 
         return view('modules.index', ['modules' => $modules]);
     }
@@ -91,7 +91,7 @@ class ModuleController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('modules/dt', [
+        $apiResponse = $this->passwordClient->get('modules/datatables', [
             'query' => $request->query(),
         ]);
 

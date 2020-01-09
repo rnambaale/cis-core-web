@@ -4,13 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
@@ -69,36 +64,14 @@ class ForgotPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return void
+     * @return int
      */
     protected function remoteEmailValidation($request)
     {
-        try {
-            $this->machineClient->post('users/email', [
-                'form_params' => $request->input(),
-            ]);
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
+        $response = $this->machineClient->post('users/email', [
+            'form_params' => $request->input(),
+        ]);
 
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-
-            if ($statusCode === 422) {
-                $validator = Validator::make([], []);
-
-                $validator->errors()->merge($body['errors']);
-
-                throw new ValidationException($validator);
-            }
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        return redirect()->back();
+        return $response->getStatusCode();
     }
 }

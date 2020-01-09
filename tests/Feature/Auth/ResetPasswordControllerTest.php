@@ -7,6 +7,7 @@ use App\Models\User;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -52,14 +53,37 @@ class ResetPasswordControllerTest extends TestCase
             'password' => Hash::make('old-password'),
         ]);
 
-        $response = $this->from(route('password.reset', 'invalid_token'))->post(route('password.update'), [
-            'token' => 'invalid_token',
+        $response = $this->from(route('password.reset', 'unknown_token'))->post(route('password.update'), [
+            'token' => 'unknown_token',
             'email' => $user->email,
             'password' => 'new-awesome-password',
             'password_confirmation' => 'new-awesome-password',
         ]);
 
-        $response->assertRedirect(route('password.reset', 'invalid_token'));
+        $response->assertRedirect(route('password.reset', 'unknown_token'));
+        $this->assertEquals($user->email, $user->fresh()->email);
+        $this->assertTrue(Hash::check('old-password', $user->fresh()->password));
+        $this->assertGuest();
+    }
+
+    public function test_cant_reset_password_with_expired_token()
+    {
+        $user = factory(User::class)->create([
+            'password' => Hash::make('old-password'),
+        ]);
+
+        $token = $this->getResetToken($user);
+
+        DB::table('password_resets')->where('email', $user->email)->update(['created_at' => '1970-01-01 00:00:00']);
+
+        $response = $this->from(route('password.reset', 'expired_token'))->post(route('password.update'), [
+            'token' => $token,
+            'email' => $user->email,
+            'password' => 'new-awesome-password',
+            'password_confirmation' => 'new-awesome-password',
+        ]);
+
+        $response->assertRedirect(route('password.reset', 'expired_token'));
         $this->assertEquals($user->email, $user->fresh()->email);
         $this->assertTrue(Hash::check('old-password', $user->fresh()->password));
         $this->assertGuest();
@@ -149,8 +173,6 @@ class ResetPasswordControllerTest extends TestCase
      */
     public function test_can_reset_password_with_valid_token()
     {
-        $this->withoutExceptionHandling();
-
         $fakeResponse = new Response(204, [], null);
 
         $fakeMachineClient = $this->mockMachineClient($fakeResponse);

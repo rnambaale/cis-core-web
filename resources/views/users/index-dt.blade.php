@@ -38,13 +38,13 @@
                 columnDefs: [
                     {
                         targets: 0,
-                        name: 'users.id',
+                        name: 'id',
                         data: 'id',
                         visible: false
                     },
                     {
                         targets: 1,
-                        name: 'users.alias',
+                        name: 'alias',
                         data: 'alias',
                         render: function (data, type, row, meta) {
                             return '<a href="'+route('users.show', row.id)+'">'+data+'</a>'
@@ -52,22 +52,22 @@
                     },
                     {
                         targets: 2,
-                        name: 'users.name',
+                        name: 'name',
                         data: 'name'
                     },
                     {
                         targets: 3,
-                        name: 'users.email',
+                        name: 'email',
                         data: 'email'
                     },
                     {
                         targets: 4,
-                        name: 'roles.name',
+                        name: 'role.name',
                         data: 'role.name'
                     },
                     {
                         targets: 5,
-                        name: 'users.deleted_at',
+                        name: 'deleted_at',
                         data: 'deleted_at',
                         visible: false
                     },

@@ -38,7 +38,7 @@
                 columnDefs: [
                     {
                         targets: 0,
-                        name: 'modules.name',
+                        name: 'name',
                         data: 'name',
                         render: function (data, type, row, meta) {
                             return '<a href="'+route('modules.show', row.name)+'">'+data+'</a>'
@@ -46,12 +46,12 @@
                     },
                     {
                         targets: 1,
-                        name: 'modules.category',
+                        name: 'category',
                         data: 'category'
                     },
                     {
                         targets: 2,
-                        name: 'modules.description',
+                        name: 'description',
                         data: 'description'
                     },
                     {

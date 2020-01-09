@@ -20,29 +20,27 @@ class PermissionControllerTest extends TestCase
     public function test_can_show_permissions()
     {
         $fakeApiResponseBody = [
-            'permissions' => [
-                'current_page' => 1,
-                'data' => [
-                    [
-                        'id' => 1,
-                        'module_name' => 'users',
-                        'name' => 'view-any',
-                        'description' => 'View any user',
-                        'created_at' => '2018-09-30 09:42:23',
-                        'updated_at' => '2018-10-02 14:27:09',
-                    ],
+            'current_page' => 1,
+            'data' => [
+                [
+                    'id' => 1,
+                    'module_name' => 'users',
+                    'name' => 'view-any',
+                    'description' => 'View any user',
+                    'created_at' => '2018-09-30 09:42:23',
+                    'updated_at' => '2018-10-02 14:27:09',
                 ],
-                'first_page_url' => 'http://api.test/v1/permissions?page=1',
-                'from' => 1,
-                'last_page' => 1,
-                'last_page_url' => 'http://api.test/v1/permissions?page=1',
-                'next_page_url' => null,
-                'path' => 'http://api.test/v1/permissions',
-                'per_page' => 15,
-                'prev_page_url' => null,
-                'to' => 1,
-                'total' => 1,
             ],
+            'first_page_url' => 'http://api.test/v1/permissions?page=1',
+            'from' => 1,
+            'last_page' => 1,
+            'last_page_url' => 'http://api.test/v1/permissions?page=1',
+            'next_page_url' => null,
+            'path' => 'http://api.test/v1/permissions',
+            'per_page' => 15,
+            'prev_page_url' => null,
+            'to' => 1,
+            'total' => 1,
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -111,6 +109,63 @@ class PermissionControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertViewIs('permissions.index-dt');
+    }
+
+    public function test_can_load_permissions_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => 1,
+                    'module_name' => 'users',
+                    'name' => 'view-any',
+                    'description' => 'View any user',
+                    'created_at' => '2018-09-30 09:42:23',
+                    'updated_at' => '2018-10-02 14:27:09',
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('permissions.dt'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('permissions.dt'));
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'id',
+                    'module_name',
+                    'name',
+                    'description',
+                    'created_at',
+                    'updated_at',
+                ],
+            ],
+        ]);
     }
 
     public function test_can_show_permission()
@@ -319,7 +374,7 @@ class PermissionControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->get(route('permissions.update', $permissionId));
+        $response = $this->actingAs($user)->put(route('permissions.update', $permissionId));
 
         $response->assertStatus(403);
 

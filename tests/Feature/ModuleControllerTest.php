@@ -20,29 +20,27 @@ class ModuleControllerTest extends TestCase
     public function test_can_show_modules()
     {
         $fakeApiResponseBody = [
-            'modules' => [
-                'current_page' => 1,
-                'data' => [
-                    [
-                        'name' => 'users',
-                        'description' => 'Users module.',
-                        'category'      => 'uncategorized',
-                        'created_at' => '2019-10-15 16:50:47',
-                        'updated_at' => '2019-10-15 16:50:47',
-                        'deleted_at' => null,
-                    ],
+            'current_page' => 1,
+            'data' => [
+                [
+                    'name' => 'users',
+                    'description' => 'Users module.',
+                    'category'      => 'uncategorized',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
                 ],
-                'first_page_url' => 'http://api.test/v1/modules?page=1',
-                'from' => 1,
-                'last_page' => 1,
-                'last_page_url' => 'http://api.test/v1/modules?page=1',
-                'next_page_url' => null,
-                'path' => 'http://api.test/v1/modules',
-                'per_page' => 15,
-                'prev_page_url' => null,
-                'to' => 1,
-                'total' => 1,
             ],
+            'first_page_url' => 'http://api.test/v1/modules?page=1',
+            'from' => 1,
+            'last_page' => 1,
+            'last_page_url' => 'http://api.test/v1/modules?page=1',
+            'next_page_url' => null,
+            'path' => 'http://api.test/v1/modules',
+            'per_page' => 15,
+            'prev_page_url' => null,
+            'to' => 1,
+            'total' => 1,
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -113,14 +111,71 @@ class ModuleControllerTest extends TestCase
         $response->assertViewIs('modules.index-dt');
     }
 
+    public function test_can_load_modules_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'name' => 'users',
+                    'description' => 'Users module.',
+                    'category' => 'uncategorized',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('modules.dt'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('modules', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('modules.dt'));
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'name',
+                    'description',
+                    'category',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at',
+                ],
+            ],
+        ]);
+    }
+
     public function test_can_show_module()
     {
         $moduleName = 'users';
 
         $fakeApiResponseBody = [
-            'name'          => $moduleName,
-            'description'   => 'Users module.',
-            'category'      => 'uncategorized',
+            'name' => $moduleName,
+            'description' => 'Users module.',
+            'category' => 'uncategorized',
             'created_at' => '2019-10-15 16:50:47',
             'updated_at' => '2019-10-15 16:50:47',
             'deleted_at' => null,
@@ -397,7 +452,7 @@ class ModuleControllerTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        $response = $this->actingAs($user)->get(route('modules.destroy', $moduleName));
+        $response = $this->actingAs($user)->delete(route('modules.destroy', $moduleName));
 
         $response->assertStatus(403);
 

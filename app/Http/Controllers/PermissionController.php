@@ -53,7 +53,7 @@ class PermissionController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $permissions = paginate($request, $body->permissions);
+        $permissions = paginate($request, $body);
 
         return view('permissions.index', ['permissions' => $permissions]);
     }
@@ -92,7 +92,7 @@ class PermissionController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('permissions/dt', [
+        $apiResponse = $this->passwordClient->get('permissions/datatables', [
             'query' => $request->query(),
         ]);
 

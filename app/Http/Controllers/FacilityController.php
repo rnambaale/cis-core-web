@@ -53,7 +53,7 @@ class FacilityController extends Controller
 
         $body = json_decode($apiResponse->getBody(), false);
 
-        $facilities = paginate($request, $body->facilities);
+        $facilities = paginate($request, $body);
 
         return view('facilities.index', ['facilities' => $facilities]);
     }
@@ -91,7 +91,7 @@ class FacilityController extends Controller
             throw new AuthorizationException('Unauthorized access', 403);
         }
 
-        $apiResponse = $this->passwordClient->get('facilities/dt', [
+        $apiResponse = $this->passwordClient->get('facilities/datatables', [
             'query' => $request->query(),
         ]);
 

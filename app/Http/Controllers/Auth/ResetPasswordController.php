@@ -5,9 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,15 +74,7 @@ class ResetPasswordController extends Controller
 
         $passwordReset = DB::table('password_resets')->where('email', $request->email)->first();
 
-        if (! $passwordReset) {
-            $validator = Validator::make([], []);
-
-            $validator->errors()->add('email', 'The password reset token is unknown.');
-
-            throw new ValidationException($validator);
-        }
-
-        if (! Hash::check($request->token, $passwordReset->token)) {
+        if (! $passwordReset || ! Hash::check($request->token, $passwordReset->token)) {
             $validator = Validator::make([], []);
 
             $validator->errors()->add('email', 'The password reset token is invalid.');
@@ -101,15 +90,11 @@ class ResetPasswordController extends Controller
             throw new ValidationException($validator);
         }
 
-        $response = $this->remoteResetPassword($request);
-
-        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-            return $response;
-        }
+        $this->remoteResetPassword($request);
 
         DB::table('password_resets')->where('email')->delete();
 
-        // Because the use is not logged in yet...
+        // Because the user is not logged in yet...
         // event(new PasswordReset($user));
 
         $message = trans('Password reset successful, login to access your account.');
@@ -138,38 +123,14 @@ class ResetPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return int|\Symfony\Component\HttpFoundation\Response Remote user or http response.
+     * @return int
      */
     protected function remoteResetPassword(Request $request)
     {
-        try {
-            $response = $this->machineClient->put('users/password/reset', [
-                'form_params' => $request->input(),
-            ]);
+        $response = $this->machineClient->put('users/password/reset', [
+            'form_params' => $request->input(),
+        ]);
 
-            return $response->getStatusCode();
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
-
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-
-            if ($statusCode === 422) {
-                $validator = Validator::make([], []);
-
-                $validator->errors()->merge($body['errors']);
-
-                throw new ValidationException($validator);
-            }
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        return redirect()->back();
+        return $response->getStatusCode();
     }
 }

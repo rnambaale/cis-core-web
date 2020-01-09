@@ -20,30 +20,28 @@ class RoleControllerTest extends TestCase
     public function test_can_show_roles()
     {
         $fakeApiResponseBody = [
-            'roles' => [
-                'current_page' => 1,
-                'data' => [
-                    [
-                        'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                        'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                        'name' => 'Developer',
-                        'description' => 'Role Description',
-                        'created_at' => '2019-10-15 16:50:47',
-                        'updated_at' => '2019-10-15 16:50:47',
-                        'deleted_at' => null,
-                    ],
+            'current_page' => 1,
+            'data' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'Developer',
+                    'description' => 'Role Description',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
                 ],
-                'first_page_url' => 'http://api.test/v1/roles?page=1',
-                'from' => 1,
-                'last_page' => 1,
-                'last_page_url' => 'http://api.test/v1/roles?page=1',
-                'next_page_url' => null,
-                'path' => 'http://api.test/v1/roles',
-                'per_page' => 15,
-                'prev_page_url' => null,
-                'to' => 1,
-                'total' => 1,
             ],
+            'first_page_url' => 'http://api.test/v1/roles?page=1',
+            'from' => 1,
+            'last_page' => 1,
+            'last_page_url' => 'http://api.test/v1/roles?page=1',
+            'next_page_url' => null,
+            'path' => 'http://api.test/v1/roles',
+            'per_page' => 15,
+            'prev_page_url' => null,
+            'to' => 1,
+            'total' => 1,
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -113,6 +111,65 @@ class RoleControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertViewIs('roles.index-dt');
+    }
+
+    public function test_can_load_roles_via_datatables()
+    {
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'Developer',
+                    'description' => 'Role Description.',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('roles.dt'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('roles', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('roles.dt'));
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'id',
+                    'facility_id',
+                    'name',
+                    'description',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at',
+                ],
+            ],
+        ]);
     }
 
     public function test_can_show_role()
@@ -420,5 +477,114 @@ class RoleControllerTest extends TestCase
             ->delete(route('roles.destroy', $roleId));
 
         $response->assertRedirect(route('roles.index'));
+    }
+
+    public function test_can_show_role_permissions()
+    {
+        $roleId = 'f0f95c23-6ba1-4348-b1d9-bfb5e4bb1e3f';
+
+        $fakeApiResponseBody = [
+            'id' => $roleId,
+            'facility_id' => '0ac99f1b-482c-4af1-be28-ddace07eff20',
+            'name' => 'Sys Admin',
+            'description' => 'System Administrator',
+            'created_at' => '2020-01-09 07:27:43',
+            'updated_at' => '2020-01-09 07:27:43',
+            'deleted_at' => null,
+            'permissions' => [
+                [
+                    'id' => 1,
+                    'name' => 'view-any',
+                    'granted' => true,
+                    'module' => [
+                        'name' => 'users',
+                        'category' => 'uncategorized',
+                    ],
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('roles.permissions.show', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'assign-permissions');
+
+        $response = $this->actingAs($user)->get(route('roles.permissions.show', $roleId));
+
+        $response->assertStatus(200);
+
+        $response->assertViewIs('roles.permissions');
+
+        $role = objectify($fakeApiResponseBody);
+
+        $role->permissions = collect($role->permissions)->groupBy('module.name');
+
+        $response->assertViewHas('role', $role);
+    }
+
+    public function test_can_update_role_permissions()
+    {
+        $roleId = 'f0f95c23-6ba1-4348-b1d9-bfb5e4bb1e3f';
+        $roleName = 'Sys Admin';
+
+        $fakeApiResponseBody = [
+            'id' => $roleId,
+            'facility_id' => '0ac99f1b-482c-4af1-be28-ddace07eff20',
+            'name' => 'Sys Admin',
+            'description' => 'System Administrator',
+            'created_at' => '2020-01-09 07:27:43',
+            'updated_at' => '2020-01-09 07:27:43',
+            'deleted_at' => null,
+            'permissions' => [
+                [
+                    'id' => 1,
+                    'name' => 'view-any',
+                    'granted' => true,
+                    'module' => [
+                        'name' => 'users',
+                        'category' => 'uncategorized',
+                    ],
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->put(route('roles.permissions.update', $roleId));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('permissions', 'assign-permissions');
+
+        $response = $this->actingAs($user)
+            ->from(route('roles.permissions.show', $roleId))
+            ->put(route('roles.permissions.update', $roleId), []);
+
+        $response->assertRedirect(route('roles.permissions.show', $roleId));
+        $response->assertSessionHas('flash_notification.0.level', 'success');
+        $response->assertSessionHas('flash_notification.0.message', "{$roleName} permissions updated.");
     }
 }

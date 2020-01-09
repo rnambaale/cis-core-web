@@ -30,6 +30,10 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
     Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
     Route::post('password/reset', 'ResetPasswordController@reset')->name('password.update');
 
+    // Password confirmation routes...
+    Route::get('password/confirm', 'ConfirmPasswordController@showConfirmForm')->name('password.confirm');
+    Route::post('password/confirm', 'ConfirmPasswordController@confirm');
+
     // Email verification routes...
     Route::get('email/verify', 'VerificationController@show')->name('verification.notice');
     Route::get('email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
@@ -39,7 +43,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
 Route::pattern('facility', $uuid);
 
 Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
-    Route::get('/', 'FacilityController@index')->name('index');
+    Route::get('/', 'FacilityController@index')->name('index')->middleware(['password.confirm']);
     Route::get('/dt', 'FacilityController@showDatatables')->name('dt.show');
     Route::get('/dt/load', 'FacilityController@datatables')->name('dt');
     Route::post('/', 'FacilityController@store')->name('store');

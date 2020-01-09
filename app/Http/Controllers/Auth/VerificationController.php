@@ -4,9 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
@@ -97,38 +94,16 @@ class VerificationController extends Controller
      *
      * @param string $email Authenticated user email
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     *
      * @return int
      */
     protected function remoteVerifyEmail(string $email)
     {
-        try {
-            $response = $this->machineClient->put('users/email', [
-                'form_params' => [
-                    'email' => $email,
-                ],
-            ]);
+        $response = $this->machineClient->put('users/email', [
+            'form_params' => [
+                'email' => $email,
+            ],
+        ]);
 
-            return $response->getStatusCode();
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
-
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-
-            if ($statusCode === 422) {
-                throw new AuthorizationException($body['errors']['email'][0]);
-            }
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        throw new AuthorizationException();
+        return $response->getStatusCode();
     }
 }

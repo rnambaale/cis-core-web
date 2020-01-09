@@ -20,33 +20,31 @@ class UserControllerTest extends TestCase
     public function test_can_show_users()
     {
         $fakeApiResponseBody = [
-            'users' => [
-                'current_page' => 1,
-                'data' => [
-                    [
-                        'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                        'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                        'role_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
-                        'name' => 'John Doe',
-                        'alias' => 'Jdoe',
-                        'email' => 'Jdoe@example.com',
-                        'email_verified_at' => '2018-09-30 17:06:12',
-                        'created_at' => '2019-10-15 16:50:47',
-                        'updated_at' => '2019-10-15 16:50:47',
-                        'deleted_at' => null,
-                    ],
+            'current_page' => 1,
+            'data' => [
+                [
+                    'id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'facility_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'role_id' => 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929',
+                    'name' => 'John Doe',
+                    'alias' => 'Jdoe',
+                    'email' => 'Jdoe@example.com',
+                    'email_verified_at' => '2018-09-30 17:06:12',
+                    'created_at' => '2019-10-15 16:50:47',
+                    'updated_at' => '2019-10-15 16:50:47',
+                    'deleted_at' => null,
                 ],
-                'first_page_url' => 'http://api.test/v1/users?page=1',
-                'from' => 1,
-                'last_page' => 1,
-                'last_page_url' => 'http://api.test/v1/users?page=1',
-                'next_page_url' => null,
-                'path' => 'http://api.test/v1/users',
-                'per_page' => 15,
-                'prev_page_url' => null,
-                'to' => 1,
-                'total' => 1,
             ],
+            'first_page_url' => 'http://api.test/v1/users?page=1',
+            'from' => 1,
+            'last_page' => 1,
+            'last_page_url' => 'http://api.test/v1/users?page=1',
+            'next_page_url' => null,
+            'path' => 'http://api.test/v1/users',
+            'per_page' => 15,
+            'prev_page_url' => null,
+            'to' => 1,
+            'total' => 1,
         ];
 
         $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
@@ -119,6 +117,73 @@ class UserControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertViewIs('users.index-dt');
+    }
+
+    public function test_can_load_users_via_datatables()
+    {
+        $userId = $facilityId = $roleId = 'bc6d2fb7-caa9-40ae-b29e-fab51aeea929';
+
+        $fakeApiResponseBody = [
+            'draw' => 1,
+            'recordsTotal' => 1,
+            'recordsFiltered' => 1,
+            'data' => [
+                [
+                    'id' => $userId,
+                    'facility_id' => $facilityId,
+                    'role_id' => $roleId,
+                    'alias' => 'jdoe',
+                    'name' => 'John Doe',
+                    'email' => 'jdoe@example.com',
+                    'email_verified_at' => '2018-09-30 17:06:12',
+                    'created_at' => '2018-09-30 09:42:23',
+                    'updated_at' => '2018-10-02 14:27:09',
+                    'deleted_at' => null,
+                ],
+            ],
+        ];
+
+        $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+        $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+        $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->get(route('users.dt'));
+
+        $response->assertStatus(403);
+
+        // ...
+
+        $this->fakeUserPermission('users', 'view-any');
+
+        $response = $this->actingAs($user)->get(route('users.dt'));
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'draw',
+            'recordsTotal',
+            'recordsFiltered',
+            'data' => [
+                '*' => [
+                    'id',
+                    'facility_id',
+                    'role_id',
+                    'alias',
+                    'name',
+                    'email',
+                    'email_verified_at',
+                    'created_at',
+                    'updated_at',
+                    'deleted_at',
+                ],
+            ],
+        ]);
     }
 
     public function test_can_show_user()

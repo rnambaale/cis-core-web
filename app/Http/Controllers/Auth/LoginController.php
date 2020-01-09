@@ -9,8 +9,6 @@ use App\Models\User;
 use Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -95,7 +93,7 @@ class LoginController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function login(Request $request)
     {
@@ -107,8 +105,10 @@ class LoginController extends Controller
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if (
+            method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)
+        ) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
@@ -122,30 +122,24 @@ class LoginController extends Controller
 
         $this->syncRemoteUser($alien, $request->password);
 
-        // Backup password-grant token
-
+        // Persist password-grant token
         $this->tokenRepository->create((array) $alien->token);
 
-        // Attempt local login
+        // Attempt local login:
+        // Should never fail since auth is handled by remote API
+        // add a correct user has been syncd to local persistent storage.
+        $this->attemptLogin($request);
 
-        if ($this->attemptLogin($request)) {
+        // Sync user permissions
+        $role = $this->remoteQueryPermissionsAvailable($alien->role_id);
 
-            // Sync user permissions
+        $permissions = $this->processPermissions($role->permissions);
 
-            $apiResponse = $this->remoteQueryPermissionsGranted($alien->role_id);
+        $request->session()->put('modules', $permissions->modules);
 
-            $permissions = $this->processPermissions($apiResponse['permissions']);
+        $request->session()->put('categories', $permissions->categories);
 
-            $request->session()->put('modules', $permissions['modules']);
-
-            $request->session()->put('categories', $permissions['categories']);
-
-            // ...
-
-            return $this->sendLoginResponse($request);
-        }
-
-        return $this->sendFailedLoginResponse($request);
+        return $this->sendLoginResponse($request);
     }
 
     /**
@@ -157,13 +151,7 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $response = $this->remoteLogout($request);
-
-        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-            return $response;
-        }
-
-        // ...
+        $this->remoteLogout($request);
 
         $this->guard()->logout();
 
@@ -177,29 +165,13 @@ class LoginController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return int|\Symfony\Component\HttpFoundation\Response Remote user or http response.
+     * @return int HTTP status code
      */
-    protected function remoteLogout($request)
+    protected function remoteLogout(Request $request)
     {
-        try {
-            $response = $this->passwordClient->post('users/deauth');
+        $response = $this->passwordClient->post('users/deauth');
 
-            return $response->getStatusCode();
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
-
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        return redirect()->back();
+        return $response->getStatusCode();
     }
 
     /**
@@ -209,7 +181,7 @@ class LoginController extends Controller
      *
      * @return object|\Symfony\Component\HttpFoundation\Response Remote user or http response.
      */
-    protected function remoteLogin($request)
+    protected function remoteLogin(Request $request)
     {
         try {
             $response = $this->machineClient->post('users/auth', [
@@ -222,8 +194,6 @@ class LoginController extends Controller
             $api_response = json_decode($response->getBody());
 
             return $api_response;
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
         } catch (ClientException $ex) {
             // If the login attempt was unsuccessful we will increment the number of attempts
             // to login and redirect the user back to the login form. Of course, when this
@@ -234,54 +204,30 @@ class LoginController extends Controller
 
             $body = json_decode($ex->getResponse()->getBody(), true);
 
-            if ($statusCode == 422) {
-                flash($body['message'])->warning()->important();
+            flash($body['message'])->warning()->important();
 
-                return redirect()->back()
-                    ->withInput($request->only('email', 'remember'))
-                    ->withErrors($body['errors']);
+            if ($statusCode !== 422) {
+                return redirect()->back();
             }
 
-            flash($body['message'])->warning()->important();
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
+            return redirect()->back()
+                ->withInput($request->only('email', 'remember'))
+                ->withErrors($body['errors']);
         }
-
-        return redirect()->back();
     }
 
     /**
      * Remote; query permissions granted to user.
      *
-     * @param string $role User role ID
+     * @param string $roleId
      *
-     * @return array|\Symfony\Component\HttpFoundation\Response
+     * @return object
      */
-    protected function remoteQueryPermissionsGranted(string $role): array
+    protected function remoteQueryPermissionsAvailable(string $roleId): object
     {
-        try {
-            $response = $this->passwordClient->get("roles/{$role}/permissions/granted");
+        $response = $this->passwordClient->get("roles/{$roleId}/permissions/available");
 
-            $api_response = json_decode($response->getBody(), true);
-
-            return $api_response;
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
-
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        return redirect()->back();
+        return json_decode($response->getBody(), false);
     }
 
     /**
@@ -289,22 +235,24 @@ class LoginController extends Controller
      *
      * @param array $rawPermissions
      *
-     * @return array
+     * @return object
      */
-    protected function processPermissions(array $rawPermissions)
+    protected function processPermissions(array $rawPermissions): object
     {
         $categories = $modules = [];
 
         foreach ($rawPermissions as $permission) {
-            if ($permission['granted']) {
-                $categories[] = $permission['module']['category'];
-
-                $module = $permission['module']['name'];
-                $modules[$module][] = $permission['name'];
+            if (! $permission->granted) {
+                continue;
             }
+
+            $categories[] = $permission->module->category;
+
+            $module = $permission->module->name;
+            $modules[$module][] = $permission->name;
         }
 
-        return [
+        return (object) [
             'categories' => array_unique($categories),
             'modules' => $modules,
         ];

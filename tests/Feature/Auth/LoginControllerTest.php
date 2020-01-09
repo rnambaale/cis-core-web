@@ -8,8 +8,6 @@ use App\Models\User;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 /**
@@ -78,8 +76,6 @@ class LoginControllerTest extends TestCase
 
     public function test_cant_login_with_invalid_email()
     {
-        // ...
-
         $fakeApiResponseHeaders = [
             'Content-Type' => 'application/json',
         ];
@@ -100,10 +96,6 @@ class LoginControllerTest extends TestCase
         $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
 
         // ...
-
-        $user = factory(User::class)->create([
-            'password' => Hash::make('gJrFhC2B-!Y!4CTk'),
-        ]);
 
         $response = $this->from(route('login'))->post(route('login'), [
             'email' => 'unknown@example.com',
@@ -136,12 +128,8 @@ class LoginControllerTest extends TestCase
 
         // ...
 
-        $user = factory(User::class)->create([
-            'password' => Hash::make('gJrFhC2B-!Y!4CTk'),
-        ]);
-
         $response = $this->from(route('login'))->post(route('login'), [
-            'email' => $user->email,
+            'email' => 'jdoe@example.com',
             'password' => 'invalid-password',
         ]);
 
@@ -149,6 +137,31 @@ class LoginControllerTest extends TestCase
         $response->assertSessionHasErrors('email');
         $this->assertTrue(session()->hasOldInput('email'));
         $this->assertFalse(session()->hasOldInput('password'));
+        $this->assertGuest();
+    }
+
+    public function test_redirects_on_unknown_bad_request()
+    {
+        $fakeApiResponseBody = [
+            'message' => 'Some random 4xx error.',
+        ];
+
+        $fakeResponse = new Response(400, [], json_encode($fakeApiResponseBody));
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
+        $response = $this->from(route('login'))->post(route('login'), [
+            'email' => 'jdoe@example.com',
+            'password' => 'gJrFhC2B-!Y!4CTk',
+        ]);
+
+        $response->assertRedirect(route('login'));
+        $response->assertSessionHas('flash_notification.0.level', 'warning');
+        $response->assertSessionHas('flash_notification.0.message', 'Some random 4xx error.');
         $this->assertGuest();
     }
 
@@ -173,13 +186,9 @@ class LoginControllerTest extends TestCase
 
         // ...
 
-        $user = factory(User::class)->create([
-            'password' => Hash::make('gJrFhC2B-!Y!4CTk'),
-        ]);
-
         foreach (range(0, 5) as $_) {
             $response = $this->from(route('login'))->post(route('login'), [
-                'email' => $user->email,
+                'email' => 'jdoe@example.com',
                 'password' => 'invalid-password',
             ]);
         }
@@ -205,7 +214,35 @@ class LoginControllerTest extends TestCase
 
         // ...
 
-        $fakeResponse = new Response(200, [], json_encode(['permissions' => []]));
+        $fakeResponse = new Response(200, [], json_encode([
+            'id' => 'f0f95c23-6ba1-4348-b1d9-bfb5e4bb1e3f',
+            'facility_id' => '0ac99f1b-482c-4af1-be28-ddace07eff20',
+            'name' => 'Sys Admin',
+            'description' => 'System Administrator',
+            'created_at' => '2018-09-30 09:42:23',
+            'updated_at' => '2018-10-02 14:27:09',
+            'deleted_at' => null,
+            'permissions' => [
+                [
+                    'id' => 1,
+                    'name' => 'view-any',
+                    'granted' => true,
+                    'module' => [
+                        'name' => 'users',
+                        'category' => 'uncategorized',
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'force-delete',
+                    'granted' => false,
+                    'module' => [
+                        'name' => 'users',
+                        'category' => 'uncategorized',
+                    ],
+                ],
+            ],
+        ]));
 
         $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
 
@@ -213,28 +250,21 @@ class LoginControllerTest extends TestCase
 
         // ...
 
-        $password = 'gJrFhC2B-!Y!4CTk';
-
-        $user = factory(User::class)->create([
-            'password' => Hash::make($password),
-        ]);
-
         $response = $this->post(route('login'), [
-            'email' => $user->email,
-            'password' => $password,
+            'email' => 'jdoe@example.com',
+            'password' => 'gJrFhC2B-!Y!4CTk',
         ]);
 
         $response->assertRedirect(route('home'));
         $response->assertSessionHas('token');
         $response->assertSessionHas('categories');
         $response->assertSessionHas('modules');
+
+        $user = User::find('215bf10c-acd6-4643-aaa7-ec120df74cc3');
         $this->assertAuthenticatedAs($user);
     }
 
     /**
-     * @test
-     * @group passing
-     *
      * @throws \Exception
      */
     public function test_can_be_remembered()
@@ -255,20 +285,13 @@ class LoginControllerTest extends TestCase
 
         // ...
 
-        $password = 'gJrFhC2B-!Y!4CTk';
-
-        $user = factory(User::class)->create([
-            'id' => Uuid::uuid4()->toString(),
-            'password' => Hash::make($password),
-        ]);
-
         $response = $this->post(route('login'), [
-            'email' => $user->email,
-            'password' => $password,
+            'email' => 'jdoe@example.com',
+            'password' => 'gJrFhC2B-!Y!4CTk',
             'remember' => 'on',
         ]);
 
-        $user = $user->fresh();
+        $user = User::find('215bf10c-acd6-4643-aaa7-ec120df74cc3');
 
         $response->assertRedirect(route('home'));
         $response->assertCookie(Auth::guard()->getRecallerName(), vsprintf('%s|%s|%s', [
@@ -279,6 +302,7 @@ class LoginControllerTest extends TestCase
         $response->assertSessionHas('token');
         $response->assertSessionHas('categories');
         $response->assertSessionHas('modules');
+
         $this->assertAuthenticatedAs($user);
     }
 

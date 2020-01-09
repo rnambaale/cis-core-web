@@ -36,13 +36,13 @@
                 columnDefs: [
                     {
                         targets: 0,
-                        name: 'permissions.id',
+                        name: 'id',
                         data: 'id',
                         visible: false
                     },
                     {
                         targets: 1,
-                        name: 'permissions.name',
+                        name: 'name',
                         data: 'name',
                         render: function (data, type, row, meta) {
                             return '<a href="'+route('permissions.show', row.id)+'">'+data+'</a>'
@@ -50,16 +50,11 @@
                     },
                     {
                         targets: 2,
-                        name: 'permissions.module_name',
+                        name: 'module_name',
                         data: 'module_name'
                     },
                     {
                         targets: 3,
-                        name: 'permissions.description',
-                        data: 'description'
-                    },
-                    {
-                        targets: 4,
                         name: null,
                         data: null,
                         orderable: false,
@@ -189,7 +184,6 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Module Name</th>
-                                    <th>Description</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>

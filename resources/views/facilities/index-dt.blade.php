@@ -39,13 +39,13 @@
                 columnDefs: [
                     {
                         targets: 0,
-                        name: 'facilities.id',
+                        name: 'id',
                         data: 'id',
                         visible: false
                     },
                     {
                         targets: 1,
-                        name: 'facilities.name',
+                        name: 'name',
                         data: 'name',
                         render: function (data, type, row, meta) {
                             return '<a href="'+route('facilities.show', row.id)+'">'+data+'</a>'
@@ -53,17 +53,17 @@
                     },
                     {
                         targets: 2,
-                        name: 'facilities.email',
+                        name: 'email',
                         data: 'email'
                     },
                     {
                         targets: 3,
-                        name: 'facilities.website',
+                        name: 'website',
                         data: 'website'
                     },
                     {
                         targets: 4,
-                        name: 'facilities.deleted_at',
+                        name: 'deleted_at',
                         data: 'deleted_at',
                         visible: false
                     },

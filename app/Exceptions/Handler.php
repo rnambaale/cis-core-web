@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Exception;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -48,6 +51,36 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ConnectException) {
+            flash('Error connecting to remote service.')->error();
+
+            return redirect()->back();
+        }
+
+        if ($exception instanceof ClientException) {
+            $statusCode = $exception->getResponse()->getStatusCode();
+
+            $body = json_decode($exception->getResponse()->getBody(), false);
+
+            flash($body->message)->warning()->important();
+
+            if ($statusCode === 422) {
+                return redirect()->back()
+                    ->withInput($request->input())
+                    ->withErrors($body->errors);
+            }
+
+            return redirect()->back();
+        }
+
+        if ($exception instanceof RequestException) {
+            $body = json_decode($exception->getResponse()->getBody(), false);
+
+            flash($body->message)->error();
+
+            return redirect()->back();
+        }
+
         return parent::render($request, $exception);
     }
 }
