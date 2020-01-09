@@ -4,13 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Auth\ConfirmsPasswords;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class ConfirmPasswordController extends Controller
 {
@@ -44,51 +39,30 @@ class ConfirmPasswordController extends Controller
     /**
      * Create a new controller instance.
      *
+     * @param ClientCredentialsClientInterface $machineClient
+     *
      * @return void
      */
-    public function __construct(ClientCredentialsClientInterface $clientCredentialsClient)
+    public function __construct(ClientCredentialsClientInterface $machineClient)
     {
-        $this->machineClient = $clientCredentialsClient;
+        $this->machineClient = $machineClient;
         $this->middleware('auth');
     }
 
     /**
      * Confirm the given user's password.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function confirm(Request $request)
     {
-        $request->validate($this->rules(), $this->validationErrorMessages());
-
         $this->remotePasswordConfirmation($request);
 
         $this->resetPasswordConfirmationTimeout($request);
 
         return redirect()->intended($this->redirectPath());
-    }
-
-    /**
-     * Get the password confirmation validation rules.
-     *
-     * @return array
-     */
-    protected function rules()
-    {
-        return [
-            'password' => 'required',
-        ];
-    }
-
-    /**
-     * Get the password confirmation validation error messages.
-     *
-     * @return array
-     */
-    protected function validationErrorMessages()
-    {
-        return [];
     }
 
     /**
@@ -98,36 +72,14 @@ class ConfirmPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return void
+     * @return int
      */
-    protected function remotePasswordConfirmation($request)
+    protected function remotePasswordConfirmation(Request $request)
     {
-        try {
-            $this->machineClient->post('users/password', [
-                'form_params' => $request->input(),
-            ]);
-        } catch (ConnectException $ex) {
-            flash('Error connecting to remote service.')->error()->important();
-        } catch (ClientException $ex) {
-            $statusCode = $ex->getResponse()->getStatusCode();
+        $response = $this->machineClient->post('users/password', [
+            'form_params' => $request->input(),
+        ]);
 
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-
-            if ($statusCode === 422) {
-                $validator = Validator::make([], []);
-
-                $validator->errors()->merge($body['errors']);
-
-                throw new ValidationException($validator);
-            }
-        } catch (RequestException $ex) {
-            $body = json_decode($ex->getResponse()->getBody(), true);
-
-            flash($body['message'])->warning()->important();
-        }
-
-        return redirect()->back();
+        return $response->getStatusCode();
     }
 }

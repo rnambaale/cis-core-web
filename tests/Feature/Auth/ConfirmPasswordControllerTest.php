@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Clients\ClientCredentialsClientInterface;
 use App\Models\User;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -33,31 +34,51 @@ class ConfirmPasswordControllerTest extends TestCase
         $response->assertViewIs('auth.passwords.confirm');
     }
 
-    public function test_cant_confirm_password_with_an_invalid_one()
+    public function test_cant_confirm_password_with_an_invalid_password()
     {
-        $user = factory(User::class)->create([
-            'password' => Hash::make('user-password'),
-        ]);
+        $fakeApiResponseBody = [
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'password' => [
+                    'The password field is required.',
+                ],
+            ],
+        ];
 
-        $response = $this->actingAs($user)->from(route('password.confirm'))->post(route('password.confirm'), [
-            'password' => 'invalid_password',
-        ]);
+        $fakeResponse = new Response(422, [], json_encode($fakeApiResponseBody));
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->from(route('password.confirm'))->post(route('password.confirm'));
 
         $response->assertRedirect(route('password.confirm'));
-        $response->assertSessionMissing('auth.password_confirmed_at');
+
+        $response->assertSessionHasErrors('password');
     }
 
     public function test_can_confirm_password_with_a_valid_one()
     {
-        $user = factory(User::class)->create([
-            'password' => Hash::make('user-password'),
-        ]);
+        $fakeResponse = new Response(204, [], null);
+
+        $fakeMachineClient = $this->mockMachineClient($fakeResponse);
+
+        $this->app->instance(ClientCredentialsClientInterface::class, $fakeMachineClient);
+
+        // ...
+
+        $user = factory(User::class)->create();
 
         $response = $this->actingAs($user)->from(route('password.confirm'))->post(route('password.confirm'), [
-            'password' => 'user-password',
+            'password' => 'valid-password',
         ]);
 
-        //$response->assertRedirect(route('password.confirm'));
+        $response->assertRedirect('/');
         $response->assertSessionHas('auth.password_confirmed_at');
     }
 }

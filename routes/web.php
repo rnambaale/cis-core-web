@@ -43,7 +43,7 @@ Route::group(['namespace' => 'Auth', 'prefix' => '', 'as' => ''], function () {
 Route::pattern('facility', $uuid);
 
 Route::group(['prefix' => 'facilities', 'as' => 'facilities.'], function () {
-    Route::get('/', 'FacilityController@index')->name('index')->middleware(['password.confirm']);
+    Route::get('/', 'FacilityController@index')->name('index');
     Route::get('/dt', 'FacilityController@showDatatables')->name('dt.show');
     Route::get('/dt/load', 'FacilityController@datatables')->name('dt');
     Route::post('/', 'FacilityController@store')->name('store');
