@@ -30,6 +30,49 @@ class SalesController extends Controller
     }
 
     /**
+     * Show store sales.
+     *
+     * @param string  $storeId
+     * @param Request $request
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request, $storeId)
+    {
+        if (! auth_can('pharm-sales', 'view-any') && ! auth_can('pharm-stores', 'view-any')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
+        $apiResponse = $this->passwordClient->get("pharmacy/stores/{$storeId}", [
+            'query' => [
+                'paginate' => false,
+            ],
+        ]);
+
+        $store = json_decode($apiResponse->getBody(), false);
+
+        $salesApiResponse = $this->passwordClient->get('pharmacy/sales', [
+            'query' => [
+                'paginate' => false,
+                'store_id' => 'c863ef30-055b-48b6-96b6-bba8c0e1dae6',
+            ],
+        ]);
+
+        $salesBody = json_decode($salesApiResponse->getBody(), false);
+
+        // dd($salesBody->data);
+
+        return view('pharmacy.sales.index', [
+            'storeId' => $storeId,
+            'storeName' => $store->name,
+            'sales' => $salesBody->data,
+            'section' => 'sales',
+        ]);
+    }
+
+    /**
      * Show sales create.
      *
      * @param \Illuminate\http\Request $request
@@ -65,6 +108,7 @@ class SalesController extends Controller
             'storeName' => $store->name,
             'cartItems' => $cartItems,
             'cartTotal' => \Cart::session(auth()->id())->getTotal(),
+            'section' => 'sales',
         ]);
     }
 

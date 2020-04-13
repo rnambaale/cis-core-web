@@ -133,7 +133,8 @@ Route::group([
     Route::get('/stores/{store}/inventory/suggest', 'InventoryController@suggest')->name('inventories.index_suggest');
     Route::get('/stores/{store}/inventory/dt/load', 'InventoryController@datatables')->name('inventories.index.dt');
 
-    Route::get('/stores/{store}/sales', 'SalesController@create')->name('sales.create');
+    Route::get('/stores/{store}/sales', 'SalesController@index')->name('sales.index');
+    Route::get('/stores/{store}/sales/create', 'SalesController@create')->name('sales.create');
     Route::post('/stores/{store}/sales/checkout', 'SalesController@store')->name('sales.store');
 
     Route::post('/stores/{store}/sales', 'SalesCartController@store')->name('salesCart.store');

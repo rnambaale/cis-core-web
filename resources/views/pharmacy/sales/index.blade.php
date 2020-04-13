@@ -54,11 +54,17 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        
                         @include('pharmacy.nav')
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
                         
                         <div class="table-overflow">
-                            <table id="inventories" class="table table-hover table-cis">
+                            {{-- <table id="inventories" class="table table-hover table-cis">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -70,36 +76,52 @@
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
-                            </table>
+                            </table> --}}
 
-                            {{-- <table id="users" class="table table-hover table-cis">
+                            <table class="table table-hover table-cis">
                                 <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Concn</th>
-                                    <th>Packaging</th>
-                                    <th>Selling Price</th>
-                                    <th>Quantity</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($inventories as $inventory)
+                                    @foreach ($sales as $sale)
                                         <tr>
-                                            <td><a href="#">Product Name</a></td>
-                                            <td>100mg</td>
-                                            <td>Tablets</td>
-                                            <td>{{ $inventory->unit_price }}</td>
-                                            <td>{{ $inventory->quantity }}</td>
+                                            <td>{{ $sale->created_at }}</td>
+                                            <td>{{ $sale->total }}</td>
                                             <td class="text-center">
-                                                <a href="#" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
+                                                <a href="/{{ $sale->id }}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                            </table> --}}
+                            </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-secondary">
+                    <div class="card-header">Filter</div>
+                    <div class="card-body">
+                        <form method="POST" action="#" autocomplete="off">
+
+                            <div class="form-group">
+                                <label>From</label>
+                                <input type="text" name="from" class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <label>To</label>
+                                <input type="text" name="to" class="form-control">
+                            </div>
+
+                            @csrf
+
+                            <button type="submit" class="btn btn-success">Filter</button>
+                        </form>
                     </div>
                 </div>
             </div>
