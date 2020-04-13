@@ -57,6 +57,7 @@ class InventoryController extends Controller
             // 'inventories' => $body->data,
             'storeId' => $storeId,
             'storeName' => $store->name,
+            'section' => 'inventory',
         ]);
     }
 

@@ -66,6 +66,7 @@ class PurchasesController extends Controller
             'storeName' => $store->name,
             'cartItems' => $cartItems,
             'cartTotal' => $purchaseCart->getTotal(),
+            'section' => 'purchases',
         ]);
     }
 
