@@ -10,7 +10,7 @@
         <ul class="nav-right">
             <li class="user-profile dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <img class="profile-img img-fluid" src="{{ asset('espire/images/user.jpg') }}" alt="">
+                    {{-- <img class="profile-img img-fluid" src="{{ asset('espire/images/user.jpg') }}" alt=""> --}}
                     <div class="user-info">
                         <span class="name pdd-right-5">{{ Auth::user()->name }}</span>
                         <i class="ti-angle-down font-size-10"></i>

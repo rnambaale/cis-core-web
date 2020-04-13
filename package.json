@@ -23,14 +23,16 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.12.0",
         "datatables.net": "^1.10.20",
         "datatables.net-bs4": "^1.10.20",
         "datatables.net-buttons": "^1.6.1",
         "datatables.net-buttons-bs4": "^1.6.1",
-        "font-awesome": "^4.7.0",
         "jszip": "^3.2.2",
+        "metismenu": "^3.0.5",
         "pace-progressbar": "^1.0.9",
         "perfect-scrollbar": "0.6.10",
+        "select2": "^4.0.13",
         "ti-icons": "^0.1.2"
     }
 }

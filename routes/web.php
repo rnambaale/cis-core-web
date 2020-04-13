@@ -121,3 +121,29 @@ Route::group(['prefix' => 'permissions', 'as' => 'permissions.'], function () {
     Route::get('/{permission}', 'PermissionController@show')->name('show');
     Route::get('/{permission}/edit', 'PermissionController@edit')->name('edit');
 });
+
+Route::group([
+    'prefix' => 'pharmacy',
+    'as' => 'pharmacy.',
+    'namespace' => '\App\Http\Controllers\Pharmacy',
+], function () {
+    Route::get('/stores', 'StoreUserController@index')->name('stores.index');
+
+    Route::get('/stores/{store}/inventory', 'InventoryController@index')->name('inventories.index');
+    Route::get('/stores/{store}/inventory/suggest', 'InventoryController@suggest')->name('inventories.index_suggest');
+    Route::get('/stores/{store}/inventory/dt/load', 'InventoryController@datatables')->name('inventories.index.dt');
+
+    Route::get('/stores/{store}/sales', 'SalesController@create')->name('sales.create');
+    Route::post('/stores/{store}/sales/checkout', 'SalesController@store')->name('sales.store');
+
+    Route::post('/stores/{store}/sales', 'SalesCartController@store')->name('salesCart.store');
+    Route::put('/stores/{store}/sales/{item}', 'SalesCartController@update')->name('salesCart.update');
+    Route::delete('/stores/{store}/sales/{item}', 'SalesCartController@destroy')->name('salesCart.destroy');
+
+    Route::get('/stores/{store}/purchases', 'PurchasesController@create')->name('purchases.create');
+    Route::post('/stores/{store}/purchase/checkout', 'PurchasesController@store')->name('purchases.store');
+
+    Route::post('/stores/{store}/purchases', 'PurchasesCartController@store')->name('purchasesCart.store');
+    Route::put('/stores/{store}/purchases/{item}', 'PurchasesCartController@update')->name('purchasesCart.update');
+    Route::delete('/stores/{store}/purchases/{item}', 'PurchasesCartController@destroy')->name('purchasesCart.destroy');
+});

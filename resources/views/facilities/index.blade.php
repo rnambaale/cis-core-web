@@ -57,6 +57,19 @@
             </a>
         </div>
 
+        <div class="row mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 bg-transparent py-0" style="font-size: 0.95rem;">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        Facilities
+                    </li>
+                </ol>
+            </nav>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 @include('flash::message')
@@ -66,10 +79,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <div class="table-overflow">
-                            <table id="facilities" class="table table-striped table-hover no-wrap">
-                                <caption>List of facilities.</caption>
+                            <table id="facilities" class="table table-hover table-cis">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
@@ -115,7 +127,7 @@
                                                 @else
                                                     @if(auth_can('facilities', 'update'))
                                                         <a href="{{ route('facilities.edit', $facility->id) }}" class="text-info">
-                                                            <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                            <i class="fas fa-pencil-alt px-1" title="Edit"></i>
                                                         </a>
                                                     @endif
                                                     @if(auth_can('modules', 'assign-modules'))
@@ -137,7 +149,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-end">
                             {{ $facilities->links() }}
                         </div>
                     </div>

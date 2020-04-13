@@ -78,7 +78,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Name
@@ -95,6 +95,12 @@
                                 {{ $role->description }}
                             </p>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Created At
@@ -122,7 +128,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             @if($role->deleted_at)
                                 <p class="col-6">
@@ -143,7 +149,7 @@
                                 @if(auth_can('roles', 'update'))
                                 <p class="col-6">
                                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-info btn-sm btn-block">
-                                        <i class="fa fa-pencil"></i>&nbsp;Edit
+                                        <i class="fa fa-pencil-alt"></i>&nbsp;Edit
                                     </a>
                                 </p>
                                 @endif

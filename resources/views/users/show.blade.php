@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Name
@@ -103,7 +103,7 @@
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Created At
@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             @if($user->deleted_at)
                                 <p class="col">
@@ -152,7 +152,7 @@
                                 @if(auth_can('users', 'update'))
                                 <p class="col">
                                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-info btn-sm btn-block">
-                                        <i class="fa fa-pencil"></i>&nbsp;Edit
+                                        <i class="fa fa-pencil-alt"></i>&nbsp;Edit
                                     </a>
                                 </p>
                                 @endif

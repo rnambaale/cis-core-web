@@ -71,9 +71,9 @@
                         class: 'text-center',
                         render: function (data, type, row, meta) {
 
-                            var edit = '<a href="'+route('roles.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
+                            var edit = '<a href="'+route('roles.edit', row.id)+'" class="text-info"><i class="fas fa-pencil-alt px-1" title="Edit"></i></a>';
 
-                            var assignPermissions = '<a href="'+route('roles.permissions.update', row.id)+'" class="text-success"><i class="fa fa-pencil px-1" title="Permissions"></i></a>';
+                            var assignPermissions = '<a href="'+route('roles.permissions.update', row.id)+'" class="text-success"><i class="fa fa-key px-1" title="Permissions"></i></a>';
 
                             var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-facility-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 

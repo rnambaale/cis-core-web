@@ -11,47 +11,41 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- Favicon --}}
-    <link rel="shortcut icon" href="{{ asset('espire/images/logo/favicon.png') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('espire/images/logo/favicon.png') }}"> --}}
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/espire.css') }}" rel="stylesheet">
 
     @yield('extra-css')
 </head>
 
 <body>
+    
     <div class="app">
+        @include('includes.navigation')
+
+        @include('includes.sidebar')
+        
         <div class="layout">
-            {{-- Side Nav START --}}
-            @include('includes.sidebar')
-            {{-- Side Nav END --}}
 
             {{-- Page Container START --}}
             <div class="page-container">
-
-                {{-- Header START --}}
-                @include('includes.header')
-                {{-- Header END --}}
 
                 {{-- Content Wrapper START --}}
                 @yield('content')
                 {{-- Content Wrapper END --}}
 
-                {{-- Footer START --}}
-                @include('includes.footer')
-                {{-- Footer END --}}
-
             </div>
             {{-- Page Container END --}}
 
         </div>
+
+        {{-- Footer START --}}
+            @include('includes.footer')
+        {{-- Footer END --}}
     </div>
 
     <script> window.appUrl = '{!! config('app.url') !!}'; </script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js') }}"></script>
-    <script src="{{ asset('js/espire.js') }}"></script>
     <script type="text/javascript">
         var app = '{{ config('app.url') }}';
 
@@ -64,7 +58,7 @@
             }
         });
 
-        $('div.alert').not('.alert-danger, .alert-important').delay(5000).fadeOut(500);
+        // $('div.alert').not('.alert-danger, .alert-important').delay(5000).fadeOut(500);
 
         var modal = $('.modal');
 

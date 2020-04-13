@@ -80,7 +80,7 @@
                         class: 'text-center',
                         render: function (data, type, row, meta) {
 
-                            var edit = '<a href="'+route('users.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
+                            var edit = '<a href="'+route('users.edit', row.id)+'" class="text-info"><i class="fa fa-pencil-alt px-1" title="Edit"></i></a>';
 
                             var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-user-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 
@@ -203,7 +203,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <div class="table-overflow">
                             <table id="users" class="table table-striped table-hover no-wrap" style="width: 100%;">
                                 <caption>List of users.</caption>

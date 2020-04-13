@@ -21,3 +21,6 @@ npm-debug.log
 phpunit.xml
 sami.phar
 yarn-error.log
+
+
+.vscode

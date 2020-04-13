@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,30 +11,19 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
-
-mix.copy('resources/css/espire.css', 'public/css/espire.css');
-
-mix.js('resources/js/espire.js', 'public/js/espire.js');
-
-mix.copy('node_modules/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js',
-    'public/vendor/perfect-scrollbar/dist/js/min/perfect-scrollbar.jquery.min.js');
-
-mix.copy('node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css',
-    'public/vendor/perfect-scrollbar/dist/css/perfect-scrollbar.min.css');
-
-// mix.copy(
-//     'node_modules/datatables.net-buttons',
-//     'public/vendor/datatables.net-buttons'
-// );
-
-mix.copy(
-    'node_modules/datatables.net-buttons/js/buttons.html5.min.js',
-    'public/vendor/datatables.net-buttons/js/buttons.html5.min.js'
+mix.js("resources/js/app.js", "public/js").postCss(
+    "resources/css/app.css",
+    "public/css"
 );
 
 mix.copy(
-    'node_modules/jszip/dist/jszip.min.js',
-    'public/vendor/jszip/dist/jszip.min.js'
+    "node_modules/datatables.net-buttons/js/buttons.html5.min.js",
+    "public/vendor/datatables.net-buttons/js/buttons.html5.min.js"
 );
+
+mix.copy(
+    "node_modules/jszip/dist/jszip.min.js",
+    "public/vendor/jszip/dist/jszip.min.js"
+);
+
+mix.copy("resources/img", "public/img");

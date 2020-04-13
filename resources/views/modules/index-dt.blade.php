@@ -186,9 +186,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <div class="table-overflow">
-                            <table id="modules" class="table table-striped table-hover no-wrap" style="width: 100%;">
+                            <table id="modules" class="table table-hover table-cis">
                                 <caption>List of modules.</caption>
                                 <thead>
                                 <tr>

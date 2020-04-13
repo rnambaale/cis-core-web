@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="card">
-                        <div class="card-block pb-0">
+                        <div class="card-body pb-0">
                             <div class="form-group">
                                 <label for="name">Name</label>
                                 <input type="text" name="name" id="name" required

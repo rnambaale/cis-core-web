@@ -1,0 +1,268 @@
+/* Fonts */
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+/* Bootstrap */
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+/* Font Awesome */
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+
+/* jQuery datatables - bootstrap v4.x */
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+
+/* Metismenu */
+@import "~metismenu/dist/metisMenu.min.css";
+
+/* Jquery UI */
+@import "~select2/dist/css/select2.min.css";
+
+* {
+    border-radius: 0 !important;
+}
+
+body {
+    background-color: #f8fafc;
+}
+
+.form-control:focus {
+    outline: 0 none;
+    box-shadow: none;
+    border-color: #3daef3;
+}
+
+a {
+    color: #0f9aee;
+}
+
+.layout {
+    margin-left: 240px;
+    overflow: hidden;
+    padding: 0 15px 5px 15px;
+    min-height: 80vh;
+    margin-top: 70px;
+}
+
+/*================================ Tables ===============================================*/
+
+.table-cis td,
+.table-cis th {
+    font-size: 0.875rem;
+}
+
+/*================================ Navigation ===============================================*/
+
+.logo-box {
+    height: 60px;
+    width: 290px;
+    float: left;
+    background-color: #fff !important;
+    padding: 14px;
+    /* box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15); */
+    border-right: solid 1px #f4f4f4;
+}
+
+.navbar-toggle {
+    border: none;
+    color: rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    /* height: 70px; */
+    /* line-height: 70px; */
+    /* width: 60px; */
+    background-color: transparent;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sidebar {
+    width: 240px;
+    background: #ffffff;
+    /* background: #333; */
+    bottom: 0;
+    padding: 20px 0;
+    position: fixed;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    top: 56px;
+    -webkit-box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
+    box-shadow: 0 0 35px 0 rgba(154, 161, 171, 0.15);
+}
+
+.sidebar-nav ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.sidebar-nav .menu-title {
+    padding: 10px 20px;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    cursor: default;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    color: #6e768e;
+    font-weight: 600;
+}
+
+.sidebar-nav a,
+.sidebar-nav a:hover,
+.sidebar-nav a:focus,
+.sidebar-nav a:active {
+    outline: none;
+}
+.sidebar-nav ul li,
+.sidebar-nav ul a {
+    display: block;
+}
+
+.sidebar-nav ul a {
+    padding: 10px 20px;
+    color: #6e768e;
+    font-size: 0.95rem;
+}
+.sidebar-nav ul a:hover,
+.sidebar-nav ul a:focus,
+.sidebar-nav ul a:active,
+.sidebar-nav ul li.active a {
+    color: #00acc1;
+    text-decoration: none;
+}
+.sidebar-nav ul ul a {
+    padding: 10px 30px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.sidebar-nav ul ul a:hover,
+.sidebar-nav ul ul a:focus,
+.sidebar-nav ul ul a:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.sidebar-nav-item {
+    padding-left: 5px;
+}
+.sidebar-nav-item-icon {
+    padding-right: 5px;
+}
+#rtlh3 small {
+    transform: rotateY(180deg);
+    display: inline-block;
+}
+
+/*================================ Authentication ===============================================*/
+
+.login-card {
+    margin-top: 25%;
+}
+
+.login-card .login-heading {
+    padding-top: 0.5rem;
+}
+
+.login-card .login-heading h2 {
+    font-size: 1.5rem;
+}
+
+/*================================ Page Content ===============================================*/
+
+.main-content {
+    min-height: calc(100vh - 74px);
+    /* padding-top: 1rem; */
+}
+
+/*========================================== Pagination =================================================*/
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #3490dc;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #1d68a7;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.page-link:focus {
+    z-index: 2;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #3490dc;
+    border-color: #3490dc;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.sections-nav {
+    list-style: none;
+    padding: 0;
+    border-bottom: solid 1px rgb(213, 213, 213);
+}
+
+/*================================ Sections Nav ===============================================*/
+
+.sections-nav li {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    text-align: center;
+}
+
+.sections-nav li.active {
+    border-bottom: 2px solid #229dee;
+}
+
+.sections-nav li a {
+    text-decoration: none;
+    font-size: 1.1em;
+    color: #229ff0;
+    padding: 10px;
+    display: block;
+}
+
+.sections-nav li a:hover {
+    background: rgb(236, 244, 255);
+}
+
+/*================================ Footer ===============================================*/
+
+.content-footer {
+    /* background: #ddd; */
+    padding: 5px;
+    text-align: center;
+    /* color: #293A82; */
+}

@@ -11,10 +11,9 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- Favicon --}}
-    <link rel="shortcut icon" href="{{ asset('espire/images/logo/favicon.png') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('espire/images/logo/favicon.png') }}"> --}}
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/espire.css') }}" rel="stylesheet">
 
     @yield('extra-css')
 </head>

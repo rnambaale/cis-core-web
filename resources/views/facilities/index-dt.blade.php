@@ -76,9 +76,9 @@
                         class: 'text-center',
                         render: function (data, type, row, meta) {
 
-                            var edit = '<a href="'+route('facilities.edit', row.id)+'" class="text-info"><i class="fa fa-pencil px-1" title="Edit"></i></a>';
+                            var edit = '<a href="'+route('facilities.edit', row.id)+'" class="text-info"><i class="fas fa-pencil-alt px-1" title="Edit">E</i></a>';
 
-                            var assignModules = '<a href="'+route('facilities.modules.update', row.id)+'" class="text-success"><i class="fa fa-pencil px-1" title="Modules"></i></a>';
+                            var assignModules = '<a href="'+route('facilities.modules.update', row.id)+'" class="text-success"><i class="fa fa-key" title="Modules"></i></a>';
 
                             var softDelete = '<a href="" class="text-warning" data-toggle="modal"data-id="'+row.id+'" data-name="'+row.name+'"data-target="#revoke-facility-modal"><i class="fa fa-ban px-1" title="Revoke"></i></a>';
 
@@ -205,9 +205,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <div class="table-overflow">
-                            <table id="facilities" class="table table-striped table-hover no-wrap" style="width: 100%;">
+                            <table id="facilities" class="table table-hover table-cis">
                                 <caption>List of facilities.</caption>
                                 <thead>
                                 <tr>

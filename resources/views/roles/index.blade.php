@@ -59,7 +59,7 @@
 
         <div class="row mb-4">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol class="breadcrumb mb-0 bg-transparent py-0" style="font-size: 0.95rem;">
                     <li class="breadcrumb-item">
                         <a href="{{ route('home') }}">Home</a>
                     </li>
@@ -79,9 +79,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-block">
+                    <div class="card-body">
                         <div class="table-overflow">
-                            <table id="users" class="table table-striped table-hover no-wrap">
+                            <table id="users" class="table table-hover table-cis">
                                 <caption>List of roles.</caption>
                                 <thead>
                                 <tr>
@@ -120,7 +120,7 @@
                                                 @else
                                                     @if(auth_can('roles', 'update'))
                                                         <a href="{{ route('roles.edit', $role->id) }}" class="text-info">
-                                                            <i class="fa fa-pencil px-1" title="Edit"></i>
+                                                            <i class="fas fa-pencil-alt px-1" title="Edit"></i>
                                                         </a>
                                                     @endif
 
@@ -144,7 +144,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-end">
                             {{ $roles->links() }}
                         </div>
                     </div>

@@ -11,9 +11,9 @@
                     <p>You're about to restore '<span id="name"></span>'.</p>
                     <p>This will bring the facility back to normal usage.</p>
                 </div>
-                <div class="modal-footer no-border">
+                <div class="modal-footer">
                     <div class="text-right">
-                        <button class="btn btn-default btn-sm" data-dismiss="modal">
+                        <button class="btn btn-secondary btn-sm" data-dismiss="modal">
                             <i class="fa fa-times"></i>&nbsp;Cancel
                         </button>
                         <button type="submit" class="btn btn-success btn-sm">

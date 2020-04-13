@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Name
@@ -79,7 +79,7 @@
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Created At
@@ -107,11 +107,11 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col">
                                 <a href="{{ route('facilities.edit', $facility->id) }}" class="btn btn-info btn-sm btn-block">
-                                    <i class="fa fa-pencil"></i>&nbsp;Edit
+                                    <i class="fa fa-pencil-alt"></i>&nbsp;Edit
                                 </a>
                             </p>
                             @if($facility->deleted_at)

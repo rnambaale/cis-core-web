@@ -21,6 +21,8 @@ try {
 
     require('datatables.net-buttons')(window, window.$);
     require('datatables.net-buttons-bs4')(window.$);
+
+    require('metismenu');
 } catch (e) {}
 
 /**

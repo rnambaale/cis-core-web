@@ -14,6 +14,7 @@
         "ext-mbstring": "*",
         "ext-openssl": "*",
         "bmatovu/oauth-negotiator": "^1.0",
+        "darryldecode/cart": "^4.1",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
         "laracasts/flash": "^3.0",

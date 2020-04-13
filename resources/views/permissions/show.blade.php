@@ -38,7 +38,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             <p class="col-12 mb-0 small text-uppercase">
                                 Name
@@ -68,12 +68,12 @@
             </div>
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="card">
-                    <div class="card-block pb-0">
+                    <div class="card-body pb-0">
                         <div class="row">
                             @if(auth_can('permissions', 'update'))
                                 <p class="col">
                                     <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-info btn-sm btn-block">
-                                        <i class="fa fa-pencil"></i>&nbsp;Edit
+                                        <i class="fa fa-pencil-alt"></i>&nbsp;Edit
                                     </a>
                                 </p>
                             @endif
