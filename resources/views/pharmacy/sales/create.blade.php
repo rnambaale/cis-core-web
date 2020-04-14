@@ -97,9 +97,8 @@
 <div class="main-content">
     <div class="container-fluid">
 
-        <div class="page-title d-flex justify-content-between mb-0">
-
-            <div class="mb-4 d-flex flex-nowrap">
+        <div class="page-title d-flex justify-content-between mb-3">
+            <div class="d-flex flex-nowrap">
                 <h4 class="m-0">Sales</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 bg-transparent py-0" style="font-size: 0.95rem;">
@@ -117,6 +116,9 @@
             </div>
 
             <div class="d-flex flex-nowrap">
+                <a href="{{ route('pharmacy.sales.index', $storeId) }}" class="btn btn-sm btn-primary m-0">
+                    <i class="fa fa-eye"></i>&nbsp;View Sales
+                </a>
             </div>       
         </div>
 

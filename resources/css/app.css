@@ -13,8 +13,11 @@
 /* Metismenu */
 @import "~metismenu/dist/metisMenu.min.css";
 
-/* Jquery UI */
+/* Select2 */
 @import "~select2/dist/css/select2.min.css";
+
+/* Jquery UI */
+@import "~jquery-ui/themes/base/all.css";
 
 * {
     border-radius: 0 !important;
