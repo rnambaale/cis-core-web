@@ -135,6 +135,7 @@ Route::group([
 
     Route::get('/stores/{store}/sales', 'SalesController@index')->name('sales.index');
     Route::get('/stores/{store}/sales/create', 'SalesController@create')->name('sales.create');
+    Route::get('/stores/{store}/sales/{sale}', 'SalesController@show')->name('sales.show');
     Route::post('/stores/{store}/sales/checkout', 'SalesController@store')->name('sales.store');
 
     Route::post('/stores/{store}/sales', 'SalesCartController@store')->name('salesCart.store');

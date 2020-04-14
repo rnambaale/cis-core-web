@@ -38,9 +38,9 @@
             </div>
 
             <div class="d-flex flex-nowrap">
-                <a href="#" class="btn btn-sm btn-primary m-0">
+                {{-- <a href="#" class="btn btn-sm btn-primary m-0">
                     <i class="fa fa-plus"></i>&nbsp;Add Item
-                </a>
+                </a> --}}
             </div>
         </div>
 
@@ -90,9 +90,9 @@
                                     @foreach ($sales as $sale)
                                         <tr>
                                             <td>{{ $sale->created_at }}</td>
-                                            <td>{{ $sale->total }}</td>
+                                            <td>{{ number_format($sale->total) }}</td>
                                             <td class="text-center">
-                                                <a href="/{{ $sale->id }}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
+                                                <a href="{{ route('pharmacy.sales.show', [$storeId, $sale->id]) }}" class="btn btn-primary btn-sm"><i class="far fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -106,16 +106,16 @@
                 <div class="card text-white bg-secondary">
                     <div class="card-header">Filter</div>
                     <div class="card-body">
-                        <form method="POST" action="#" autocomplete="off">
+                        <form method="GET" action="" autocomplete="off">
 
                             <div class="form-group">
                                 <label>From</label>
-                                <input type="text" name="from" class="form-control">
+                                <input type="text" name="from" value="{{ $from }}" class="form-control datepicker">
                             </div>
 
                             <div class="form-group">
                                 <label>To</label>
-                                <input type="text" name="to" class="form-control">
+                                <input type="text" name="to" value="{{ $to }}" class="form-control datepicker">
                             </div>
 
                             @csrf

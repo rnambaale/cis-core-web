@@ -118,9 +118,9 @@
             </div>
 
             <div class="d-flex flex-nowrap">
-                <a href="#" class="btn btn-sm btn-primary m-0">
+                {{-- <a href="#" class="btn btn-sm btn-primary m-0">
                     <i class="fa fa-plus"></i>&nbsp;Add Item
-                </a>
+                </a> --}}
             </div>
         </div>
 

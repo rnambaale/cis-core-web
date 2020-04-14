@@ -41,9 +41,12 @@ class SalesController extends Controller
      */
     public function index(Request $request, $storeId)
     {
-        if (! auth_can('pharm-sales', 'view-any') && ! auth_can('pharm-stores', 'view-any')) {
+        if (! auth_can('pharm-sales', 'view-any')) {
             throw new AuthorizationException('Unauthorized access', 403);
         }
+
+        $from = $request->query('from', date('Y-m-d'));
+        $to = $request->query('to', date('Y-m-d'));
 
         $apiResponse = $this->passwordClient->get("pharmacy/stores/{$storeId}", [
             'query' => [
@@ -56,19 +59,19 @@ class SalesController extends Controller
         $salesApiResponse = $this->passwordClient->get('pharmacy/sales', [
             'query' => [
                 'paginate' => false,
-                'store_id' => 'c863ef30-055b-48b6-96b6-bba8c0e1dae6',
+                'store_id' => $storeId,
             ],
         ]);
 
         $salesBody = json_decode($salesApiResponse->getBody(), false);
-
-        // dd($salesBody->data);
 
         return view('pharmacy.sales.index', [
             'storeId' => $storeId,
             'storeName' => $store->name,
             'sales' => $salesBody->data,
             'section' => 'sales',
+            'from' => $from,
+            'to' => $to,
         ]);
     }
 
@@ -143,5 +146,46 @@ class SalesController extends Controller
         flash('Debited inventory items')->success();
 
         return redirect(route('pharmacy.sales.create', $storeId));
+    }
+
+    /**
+     * Show sale.
+     *
+     * @param mixed $storeId
+     * @param mixed $saleId
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     *
+     * @return \Illuminate\View\View
+     */
+    public function show($storeId, $saleId)
+    {
+        if (! auth_can('pharm-sales', 'view')) {
+            throw new AuthorizationException('Unauthorized access', 403);
+        }
+
+        $apiResponse = $this->passwordClient->get("pharmacy/sales/{$saleId}");
+
+        $saleData = json_decode($apiResponse->getBody(), false);
+
+        $store = $saleData->store;
+        $products = $saleData->products;
+        $cashier = $saleData->user;
+        $sale = [
+            'id' => $saleData->id,
+            'patient_id' => $saleData->patient_id,
+            'tax_rate' => $saleData->tax_rate,
+            'total' =>  $saleData->total,
+            'created_at' => $saleData->created_at,
+        ];
+
+        return view('pharmacy.sales.show', [
+            'storeId' => $storeId,
+            'storeName' => $store->name,
+            'products' => $products,
+            'cashier' => $cashier,
+            'sale' => $sale,
+            'section' => 'sales',
+        ]);
     }
 }

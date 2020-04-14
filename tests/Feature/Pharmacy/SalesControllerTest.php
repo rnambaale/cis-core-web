@@ -111,4 +111,61 @@ class SalesControllerTest extends TestCase
 
         $response->assertRedirect(route('pharmacy.sales.create', $storeId));
     }
+
+    // public function test_can_show_store_sales()
+    // {
+
+    //     $storeId = '0ac99f1b-482c-4af1-be28-ddace07eff20';
+
+    //     $fakeApiResponseBody = [
+    //         "current_page" => 1,
+    //         "data" => [
+    //             [
+    //                 "id" => "8060a978-0352-4094-a156-aabe532bc66d",
+    //                 "store_id" => "783125fc-b061-4f04-ae46-64d2dac93fb8",
+    //                 "patient_id" => null,
+    //                 "tax_rate" => "0.00",
+    //                 "total" => "2500.00",
+    //                 "created_at" => "2020-04-14T14:22:20Z",
+    //                 "updated_at" => "2020-04-14T14:22:20Z"
+    //             ]
+    //         ],
+    //         "first_page_url" => "http://sandbox-api.example.com/v1/pharmacy/sales?page=1",
+    //         "from" => 1,
+    //         "last_page" => 1,
+    //         "last_page_url" => 0,
+    //         "next_page_url" => null,
+    //         "path" => "http://sandbox-api.example.com/v1/pharmacy/sales",
+    //         "per_page" => 10,
+    //         "prev_page_url" => null,
+    //         "to" => 1,
+    //         "total" => 1
+    //     ];
+
+    //     $fakeResponse = new Response(200, [], json_encode($fakeApiResponseBody));
+
+    //     $fakePasswordClient = $this->mockPasswordClient($fakeResponse);
+
+    //     $this->app->instance(PasswordClientInterface::class, $fakePasswordClient);
+
+    //     // ...
+
+    //     $user = factory(User::class)->create();
+
+    //     $response = $this->actingAs($user)->get(route('pharmacy.sales.index', $storeId));
+
+    //     $response->assertStatus(403);
+
+    //     // ...
+
+    //     $this->fakeUserPermission('pharm-sales', 'view-any');
+
+    //     $response = $this->actingAs($user)->get(route('pharmacy.sales.index', $storeId));
+
+    //     dd($response->body);
+
+    //     $response->assertStatus(200);
+
+    //     $response->assertViewIs('pharmacy.sales.index');
+    // }
 }
