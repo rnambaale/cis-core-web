@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>App\Http\Controllers\Auth\LoginController | CIS CORE API</title>
+
+            <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../../css/sami.css">
+        <script src="../../../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../../../js/bootstrap.min.js"></script>
+        <script src="../../../../js/typeahead.min.js"></script>
+        <script src="../../../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:App_Http_Controllers_Auth_LoginController" data-root-path="../../../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../../../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../../../index.html">CIS CORE API</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../../../classes.html">Classes</a></li>
+                                            <li><a href="../../../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../../../traits.html">Traits</a></li>
+                    <li><a href="../../../../doc-index.html">Index</a></li>
+                    <li><a href="../../../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                        <li><a href="../../../../App.html">App</a></li><li class="backslash">\</li><li><a href="../../../../App/Http.html">Http</a></li><li class="backslash">\</li><li><a href="../../../../App/Http/Controllers.html">Controllers</a></li><li class="backslash">\</li><li><a href="../../../../App/Http/Controllers/Auth.html">Auth</a></li><li class="backslash">\</li><li>LoginController</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            LoginController
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>LoginController</strong>        extends <a href="../../../../App/Http/Controllers/Controller.html"><abbr title="App\Http\Controllers\Controller">Controller</abbr></a>        (<a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php">View source</a>)
+</p>
+
+        
+    
+
+    
+            <h2>Traits</h2>
+
+        
+    <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-6">
+                                            <abbr title="Illuminate\Foundation\Auth\AuthenticatesUsers">AuthenticatesUsers</abbr>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <abbr title="Illuminate\Foundation\Auth\Access\AuthorizesRequests">AuthorizesRequests</abbr>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <abbr title="Illuminate\Foundation\Bus\DispatchesJobs">DispatchesJobs</abbr>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+                    <div class="row">
+                <div class="col-md-6">
+                                            <abbr title="Illuminate\Foundation\Validation\ValidatesRequests">ValidatesRequests</abbr>
+                                            
+                </div>
+                <div class="col-md-6">
+                    
+                </div>
+            </div>
+            </div>
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_redirectTo">
+                                        protected                                        string
+                </td>
+                <td>$redirectTo</td>
+                <td class="last">Where to redirect users after login.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_machineClient">
+                                        protected                                        <a href="../../../../App/Http/Clients/ClientCredentialsClientInterface.html"><abbr title="App\Http\Clients\ClientCredentialsClientInterface">ClientCredentialsClientInterface</abbr></a>
+                </td>
+                <td>$machineClient</td>
+                <td class="last">Client credentials client.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_passwordClient">
+                                        protected                                        <a href="../../../../App/Http/Clients/PasswordClientInterface.html"><abbr title="App\Http\Clients\PasswordClientInterface">PasswordClientInterface</abbr></a>
+                </td>
+                <td>$passwordClient</td>
+                <td class="last">Password client.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_tokenRepository">
+                                        protected                                        <abbr title="Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface">TokenRepositoryInterface</abbr>
+                </td>
+                <td>$tokenRepository</td>
+                <td class="last">OAuth token repository.</td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<a href="../../../../App/Http/Clients/ClientCredentialsClientInterface.html"><abbr title="App\Http\Clients\ClientCredentialsClientInterface">ClientCredentialsClientInterface</abbr></a> $clientCredentialsClient, <a href="../../../../App/Http/Clients/PasswordClientInterface.html"><abbr title="App\Http\Clients\PasswordClientInterface">PasswordClientInterface</abbr></a> $passwordClient, <abbr title="Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface">TokenRepositoryInterface</abbr> $tokenRepository)
+        
+                                            <p>Create a new controller instance.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_showLoginForm">showLoginForm</a>()
+        
+                                            <p>Show the application's login form.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_login">login</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p>Handle a login request to the application.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_logout">logout</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p>Log the user out of the application.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    int
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_remoteLogout">remoteLogout</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p>Remote deauthentication.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    object|<abbr title="Symfony\Component\HttpFoundation\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_remoteLogin">remoteLogin</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p>Remote authentication.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    object
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_remoteQueryPermissionsAvailable">remoteQueryPermissionsAvailable</a>(string $roleId)
+        
+                                            <p>Remote; query permissions granted to user.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    object
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_processPermissions">processPermissions</a>(array $rawPermissions)
+        
+                                            <p>Group permissions by module.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../../../App/Models/User.html"><abbr title="App\Models\User">User</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_syncRemoteUser">syncRemoteUser</a>(object $alien, string $secret)
+        
+                                            <p>Sync remote user to local storage.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L68">line 68</a></div>
+        <code>                    void
+    <strong>__construct</strong>(<a href="../../../../App/Http/Clients/ClientCredentialsClientInterface.html"><abbr title="App\Http\Clients\ClientCredentialsClientInterface">ClientCredentialsClientInterface</abbr></a> $clientCredentialsClient, <a href="../../../../App/Http/Clients/PasswordClientInterface.html"><abbr title="App\Http\Clients\PasswordClientInterface">PasswordClientInterface</abbr></a> $passwordClient, <abbr title="Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface">TokenRepositoryInterface</abbr> $tokenRepository)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Create a new controller instance.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../../App/Http/Clients/ClientCredentialsClientInterface.html"><abbr title="App\Http\Clients\ClientCredentialsClientInterface">ClientCredentialsClientInterface</abbr></a></td>
+                <td>$clientCredentialsClient</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><a href="../../../../App/Http/Clients/PasswordClientInterface.html"><abbr title="App\Http\Clients\PasswordClientInterface">PasswordClientInterface</abbr></a></td>
+                <td>$passwordClient</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td><abbr title="Bmatovu\OAuthNegotiator\Repositories\TokenRepositoryInterface">TokenRepositoryInterface</abbr></td>
+                <td>$tokenRepository</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_showLoginForm">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L84">line 84</a></div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>showLoginForm</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Show the application's login form.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_login">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L98">line 98</a></div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>login</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Handle a login request to the application.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Validation\ValidationException">ValidationException</abbr></td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_logout">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L152">line 152</a></div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>logout</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Log the user out of the application.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_remoteLogout">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L170">line 170</a></div>
+        <code>            protected        int
+    <strong>remoteLogout</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Remote deauthentication.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>int</td>
+            <td>HTTP status code</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_remoteLogin">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L184">line 184</a></div>
+        <code>            protected        object|<abbr title="Symfony\Component\HttpFoundation\Response">Response</abbr>
+    <strong>remoteLogin</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Remote authentication.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>object|<abbr title="Symfony\Component\HttpFoundation\Response">Response</abbr></td>
+            <td>Remote user or http response.</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_remoteQueryPermissionsAvailable">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L226">line 226</a></div>
+        <code>            protected        object
+    <strong>remoteQueryPermissionsAvailable</strong>(string $roleId)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Remote; query permissions granted to user.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$roleId</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>object</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_processPermissions">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L240">line 240</a></div>
+        <code>            protected        object
+    <strong>processPermissions</strong>(array $rawPermissions)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Group permissions by module.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$rawPermissions</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>object</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_syncRemoteUser">
+        <div class="location">at         <a href="https://github.com/rnambaale/cis-core-web/blob/master/app/Http/Controllers/Auth/LoginController.php#L269">line 269</a></div>
+        <code>            protected        <a href="../../../../App/Models/User.html"><abbr title="App\Models\User">User</abbr></a>
+    <strong>syncRemoteUser</strong>(object $alien, string $secret)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Sync remote user to local storage.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>object</td>
+                <td>$alien</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$secret</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../../App/Models/User.html"><abbr title="App\Models\User">User</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
